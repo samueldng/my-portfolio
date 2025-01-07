@@ -37,8 +37,8 @@ const Page: FC = () => {
             {/* Projeto 1 */}
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
-                src="/images/projeto1.png" // Ajustado para caminho relativo considerando o nome do repositório
                 alt="Screenshot do projeto 1"
+                src="/images/projeto1.png" // Caminho corrigido
                 width={400}
                 height={300}
                 className="w-full h-56 object-cover rounded-md mb-4"
@@ -58,14 +58,14 @@ const Page: FC = () => {
             {/* Projeto 2 */}
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
-                src="/images/projeto2.png" // Ajustado para caminho relativo considerando o nome do repositório
                 alt="Screenshot do projeto 2"
+                src="/images/projeto2.png" // Caminho corrigido
                 width={400}
                 height={300}
                 className="w-full h-56 object-cover rounded-md mb-4"
               />
               <h3 className="text-2xl font-semibold text-gray-900 sm:text-xl">SIS Frota</h3>
-              <p className="text-gray-600 mb-4 sm:text-base">Gestão e conferencia de frotas</p>
+              <p className="text-gray-600 mb-4 sm:text-base">Gestão e conferência de frotas</p>
               <a
                 href="https://github.com/samueldng/Rvehicle-photo-app"
                 target="_blank"
@@ -79,8 +79,8 @@ const Page: FC = () => {
             {/* Projeto 3 */}
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
-                src="/images/projeto3.png" // Ajustado para caminho relativo considerando o nome do repositório
                 alt="Screenshot do projeto 3"
+                src="/images/projeto3.png" // Caminho corrigido
                 width={400}
                 height={300}
                 className="w-full h-56 object-cover rounded-md mb-4"
