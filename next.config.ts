@@ -1,16 +1,15 @@
-import type { Config } from "tailwindcss";
+import type { NextConfig } from "next";
 
-export default {
-  content: [
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",  // Caminho correto para o Next.js 13 com app directory
-  ],
-  theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
+const nextConfig: NextConfig = {
+  output: 'export', // Exporta como uma aplicação estática
+  trailingSlash: true, // Adiciona a barra no final da URL
+  images: {
+    unoptimized: true, // Desabilita a otimização de imagens
   },
-  plugins: [],
-} satisfies Config;
+  ...(process.env.NODE_ENV === 'production' && {
+    basePath: '/my-portfolio', // Caminho base para o repositório (produção)
+    assetPrefix: '/my-portfolio/', // Garante que os assets sejam carregados corretamente
+  }),
+};
+
+export default nextConfig;
