@@ -1,101 +1,146 @@
-import Image from "next/image";
+import { FC } from "react";
+import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp } from "react-icons/fa"; // Ícones atualizados para Email e WhatsApp
+import Image from "next/image"; // Para otimizar o carregamento de imagens
 
-export default function Home() {
+const Page: FC = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-900">
+      {/* Seção de Introdução */}
+      <section className="min-h-screen flex flex-col justify-center bg-gradient-to-r from-teal-500 via-blue-500 to-indigo-600 text-white text-center py-16 transform hover:scale-105 transition-all duration-700">
+        <h1 className="text-6xl font-extrabold tracking-wide mb-6 animate__animated animate__fadeIn animate__delay-1s sm:text-5xl md:text-6xl">Samuel Oliveira</h1>
+        <p className="text-2xl font-semibold mb-8 animate__animated animate__fadeIn animate__delay-2s sm:text-xl">Desenvolvedor Full-Stack | Especialista em Node.js, React e muito mais!</p>
+        <a
+          href="#projetos"
+          className="inline-block px-8 py-4 text-lg font-semibold bg-white text-gray-900 rounded-xl shadow-xl hover:scale-110 transition-transform transform hover:shadow-2xl animate__animated animate__fadeIn animate__delay-3s sm:px-6 sm:py-3"
+        >
+          Ver Projetos
+        </a>
+      </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+      {/* Seção de Sobre Mim */}
+      <section id="sobre" className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-semibold text-gray-900 mb-6 sm:text-3xl">Sobre Mim</h2>
+          <p className="text-xl text-gray-700 leading-relaxed mb-6 sm:text-lg">
+            Sou um desenvolvedor apaixonado por tecnologia, com experiência em projetos de larga escala
+            utilizando Node.js, React, TypeScript e outras tecnologias. Meu objetivo é criar soluções inovadoras
+            que impactem positivamente os usuários e empresas.
+          </p>
+        </div>
+      </section>
+
+      {/* Seção de Projetos */}
+      <section id="projetos" className="py-24 bg-gradient-to-r from-blue-600 to-indigo-700">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-4xl font-semibold text-center text-white mb-10 sm:text-3xl">Meus Projetos</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {/* Projeto 1 */}
+            <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+              <Image
+                src="/images/projeto1.png"
+                alt="Screenshot do projeto 1"
+                width={400}
+                height={300}
+                className="w-full h-56 object-cover rounded-md mb-4"
+              />
+              <h3 className="text-2xl font-semibold text-gray-900 sm:text-xl">Nell App</h3>
+              <p className="text-gray-600 mb-4 sm:text-base">App de gestão e estoque</p>
+              <a
+                href="https://github.com/samueldng/nell-app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg shadow-md transition-transform transform hover:scale-110 hover:bg-blue-700"
+              >
+                Ver no GitHub
+              </a>
+            </div>
+
+            {/* Projeto 2 */}
+            <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+              <Image
+                src="/images/projeto2.png"
+                alt="Screenshot do projeto 2"
+                width={400}
+                height={300}
+                className="w-full h-56 object-cover rounded-md mb-4"
+              />
+              <h3 className="text-2xl font-semibold text-gray-900 sm:text-xl">SIS Frota</h3>
+              <p className="text-gray-600 mb-4 sm:text-base">Gestão e conferencia de frotas</p>
+              <a
+                href="https://github.com/samueldng/Rvehicle-photo-app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg shadow-md transition-transform transform hover:scale-110 hover:bg-blue-700"
+              >
+                Ver no GitHub
+              </a>
+            </div>
+
+            {/* Projeto 3 */}
+            <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+              <Image
+                src="/images/projeto3.png"
+                alt="Screenshot do projeto 3"
+                width={400}
+                height={300}
+                className="w-full h-56 object-cover rounded-md mb-4"
+              />
+              <h3 className="text-2xl font-semibold text-gray-900 sm:text-xl">Squid Game</h3>
+              <p className="text-gray-600 mb-4 sm:text-base">Jogo baseado em Round 6</p>
+              <a
+                href="https://github.com/samueldng/round6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg shadow-md transition-transform transform hover:scale-110 hover:bg-blue-700"
+              >
+                Ver no GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção de Habilidades */}
+      <section id="habilidades" className="py-24 px-6 bg-gradient-to-b from-white to-gray-100">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-semibold text-gray-900 mb-10 sm:text-3xl">Habilidades</h2>
+          <div className="flex flex-wrap justify-center space-x-12 sm:space-x-8">
+            <div className="text-center transform hover:scale-110 transition-all duration-300">
+              <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">React</h3>
+              <div className="text-7xl text-blue-600">⚛️</div>
+            </div>
+            <div className="text-center transform hover:scale-110 transition-all duration-300">
+              <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">Node.js</h3>
+              <div className="text-7xl text-green-600">🌿</div>
+            </div>
+            <div className="text-center transform hover:scale-110 transition-all duration-300">
+              <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">TypeScript</h3>
+              <div className="text-7xl text-blue-500">🟦</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção de Contato */}
+      <section id="contato" className="py-24 px-6 text-center bg-gradient-to-r from-teal-600 to-blue-600 text-white">
+        <h2 className="text-4xl font-semibold mb-6 sm:text-3xl">Entre em Contato</h2>
+        <div className="flex justify-center space-x-8">
+          <a href="https://github.com/samueldng" target="_blank" rel="noopener noreferrer">
+            <FaGithub size={35} className="hover:text-white transition-all duration-300 transform hover:scale-125" />
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+          <a href="https://www.linkedin.com/in/samuel-oliveira-26bb7014a/" target="_blank" rel="noopener noreferrer">
+            <FaLinkedin size={35} className="hover:text-white transition-all duration-300 transform hover:scale-125" />
+          </a>
+          <a href="mailto:samuel-dng@outlook.com" target="_blank" rel="noopener noreferrer">
+            <FaEnvelope size={35} className="hover:text-white transition-all duration-300 transform hover:scale-125" />
+          </a>
+          <a href="https://wa.me/5599985143916" target="_blank" rel="noopener noreferrer">
+            <FaWhatsapp size={35} className="hover:text-white transition-all duration-300 transform hover:scale-125" />
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
     </div>
   );
-}
+};
+
+export default Page;
