@@ -37,7 +37,7 @@ const Page: FC = () => {
             {/* Projeto 1 */}
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
-                src="/portfolio/images/projeto1.png" // Ajustado para caminho relativo considerando o nome do repositório
+                src="/images/projeto1.png" // Ajustado para caminho relativo considerando o nome do repositório
                 alt="Screenshot do projeto 1"
                 width={400}
                 height={300}
