@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp } from "react-icons/fa"; // Ícones atualizados para Email e WhatsApp
+import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp } from "react-icons/fa"; 
 import Image from "next/image"; // Para otimizar o carregamento de imagens
 
 const Page: FC = () => {
@@ -38,7 +38,7 @@ const Page: FC = () => {
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
                 alt="Screenshot do projeto 1"
-                src="/images/projeto1.png" // Caminho corrigido
+                src="/images/projeto1.png" 
                 width={400}
                 height={300}
                 className="w-full h-56 object-cover rounded-md mb-4"
@@ -59,7 +59,7 @@ const Page: FC = () => {
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
                 alt="Screenshot do projeto 2"
-                src="/images/projeto2.png" // Caminho corrigido
+                src="/images/projeto2.png" 
                 width={400}
                 height={300}
                 className="w-full h-56 object-cover rounded-md mb-4"
@@ -80,7 +80,7 @@ const Page: FC = () => {
             <div className="bg-gray-50 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <Image
                 alt="Screenshot do projeto 3"
-                src="/images/projeto3.png" // Caminho corrigido
+                src="/images/projeto3.png" 
                 width={400}
                 height={300}
                 className="w-full h-56 object-cover rounded-md mb-4"
@@ -117,6 +117,10 @@ const Page: FC = () => {
               <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">TypeScript</h3>
               <div className="text-7xl text-blue-500">🟦</div>
             </div>
+            <div className="text-center transform hover:scale-110 transition-all duration-300">
+             <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">Go</h3>
+            <div className="text-7xl text-orange-600">🐹</div> {/* Emoji do mascote do Go */}
+             </div>
           </div>
         </div>
       </section>

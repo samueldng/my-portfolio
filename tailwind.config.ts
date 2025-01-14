@@ -1,20 +1,18 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
+export default {
   content: [
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",  // Observando todos os arquivos na pasta app
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",  // Observando arquivos na pasta pages, se existir
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",  // Observando arquivos em components, se existir
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}", // Inclui os arquivos dentro de /src/app
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",  // Usando variáveis CSS para o background
-        foreground: "var(--foreground)",  // Usando variáveis CSS para o foreground
+        background: "var(--background)",
+        foreground: "var(--foreground)",
       },
     },
   },
   plugins: [],
-};
-
-export default config;
+} satisfies Config;
