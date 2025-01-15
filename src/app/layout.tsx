@@ -1,57 +1,51 @@
-'use client'; // Necessário para habilitar o uso de hooks do lado do cliente (useEffect)
+'use client'; // Certifique-se de que está habilitado para o uso de hooks no lado do cliente
 
-import { useEffect } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
-<<<<<<< HEAD
-import "./globals.css";
-=======
-import "./globals.css"; // Certifique-se de que este caminho está correto
->>>>>>> 32adbc0021829be2bd58c473ced93e4f65838f6d
+import { useEffect } from 'react';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
-// Remover a exportação de metadata do layout (já foi movida para outro arquivo)
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   useEffect(() => {
-    const script = document.createElement("script");
+    // Carregar o script do chatbot quando o componente for montado
+    const script = document.createElement('script');
     script.src = "https://chatling.ai/js/embed.js";
+    script.async = true;
     script.dataset.id = "4873935879"; // Seu chatbotId
-    script.dataset.display = "page_inline"; // Exibição inline do chatbot
-
-    script.async = true; // Melhor uso de async
-
-    script.onload = () => {
-      console.log("Chatbot script carregado com sucesso.");
-    };
-
-    script.onerror = (error) => {
-      console.error("Erro ao carregar o chatbot:", error);
-    };
-
+    script.dataset.display = "fullscreen"; // Exibição fullscreen
     document.body.appendChild(script);
-
+  
     // Adicionar a configuração do Chatbot, se necessário
-    const chatConfig = document.createElement("script");
+    const chatConfig = document.createElement('script');
     chatConfig.innerHTML = `
       window.chtlConfig = { 
         chatbotId: "4873935879", 
-        display: "page_inline" 
+        display: "fullscreen", 
+        theme: { 
+          color: "#4caf50", 
+          backgroundColor: "#ffffff", 
+          button: { 
+            backgroundColor: "#4caf50", 
+            textColor: "#ffffff" 
+          } 
+        }
       };
     `;
     document.body.appendChild(chatConfig);
-
+  
     return () => {
       // Remover o script do chatbot quando o componente for desmontado
       document.body.removeChild(script);
@@ -62,15 +56,13 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Samuel Oliveira - Portfolio</title>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-white text-gray-900 antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-white text-gray-900 antialiased`}>
         {children}
-
-        {/* Botão do Chatbot visível no layout */}
-        <div id="chatbot-container"></div>
       </body>
     </html>
   );

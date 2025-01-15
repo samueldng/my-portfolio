@@ -11,14 +11,27 @@ const Page: FC = () => {
     script.src = "https://chatling.ai/js/embed.js";
     script.async = true;
     script.dataset.id = "4873935879"; // Seu chatbotId
-    script.dataset.display = "page_inline"; // Exibição inline do chatbot
+    script.dataset.display = "fullscreen"; // Exibição fullscreen
     document.body.appendChild(script);
-
+  
     // Adicionar a configuração do Chatbot, se necessário
     const chatConfig = document.createElement('script');
-    chatConfig.innerHTML = `window.chtlConfig = { chatbotId: "4873935879", display: "page_inline", theme: { color: "#4caf50", backgroundColor: "#ffffff", button: { backgroundColor: "#4caf50", textColor: "#ffffff" }} };`;
+    chatConfig.innerHTML = `
+      window.chtlConfig = { 
+        chatbotId: "4873935879", 
+        display: "fullscreen", 
+        theme: { 
+          color: "#4caf50", 
+          backgroundColor: "#ffffff", 
+          button: { 
+            backgroundColor: "#4caf50", 
+            textColor: "#ffffff" 
+          } 
+        }
+      };
+    `;
     document.body.appendChild(chatConfig);
-
+  
     return () => {
       // Remover o script do chatbot quando o componente for desmontado
       document.body.removeChild(script);
@@ -33,7 +46,7 @@ const Page: FC = () => {
         <h1 className="text-6xl font-extrabold tracking-wide mb-6 animate__animated animate__fadeIn animate__delay-1s sm:text-5xl md:text-6xl">Samuel Oliveira</h1>
         <p className="text-2xl font-semibold mb-8 animate__animated animate__fadeIn animate__delay-2s sm:text-xl">Desenvolvedor Full-Stack | Especialista em Node.js, React e muito mais!</p>
 
-        {/* Seção do Chatbot (entre o título e o botão "Ver Projetos") */}
+        {/* Seção do Chatbot (agora embutido na página) */}
         <div className="py-8">
           <h2 className="text-3xl font-semibold text-white mb-6 sm:text-2xl">Estou Aqui Para Ajudar!</h2>
           <p className="text-xl mb-6 sm:text-lg text-white">Precisa de informações sobre meus projetos ou quer conversar? Fique à vontade para falar comigo!</p>
@@ -41,17 +54,8 @@ const Page: FC = () => {
           {/* Contêiner do chatbot */}
           <div className="flex justify-center items-center">
             <div className="w-full max-w-md h-80 bg-white rounded-2xl shadow-lg border-2 border-gray-300 relative">
+              {/* O chatbot agora aparece diretamente na tela */}
               <div id="chatling-chatbot" className="w-full h-full bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-300"></div>
-
-              {/* Botão de Abertura do Chatbot */}
-              <div className="absolute bottom-4 left-4">
-                <button 
-                  onClick={() => document.getElementById('chatling-chatbot')?.classList.toggle('hidden')}
-                  className="bg-green-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-600 transition-all"
-                >
-                  Iniciar Chat
-                </button>
-              </div>
             </div>
           </div>
         </div>
