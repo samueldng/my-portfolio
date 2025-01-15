@@ -1,32 +1,68 @@
-import { FC } from "react";
-import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp } from "react-icons/fa"; 
+'use client'; // Diretiva que marca o componente como cliente
+
+import { FC, useEffect } from "react";
+import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import Image from "next/image"; // Para otimizar o carregamento de imagens
 
 const Page: FC = () => {
+  useEffect(() => {
+    // Carregar o script do chatbot quando o componente for montado
+    const script = document.createElement('script');
+    script.src = "https://chatling.ai/js/embed.js";
+    script.async = true;
+    script.dataset.id = "4873935879"; // Seu chatbotId
+    script.dataset.display = "page_inline"; // Exibição inline do chatbot
+    document.body.appendChild(script);
+
+    // Adicionar a configuração do Chatbot, se necessário
+    const chatConfig = document.createElement('script');
+    chatConfig.innerHTML = `window.chtlConfig = { chatbotId: "4873935879", display: "page_inline", theme: { color: "#4caf50", backgroundColor: "#ffffff", button: { backgroundColor: "#4caf50", textColor: "#ffffff" }} };`;
+    document.body.appendChild(chatConfig);
+
+    return () => {
+      // Remover o script do chatbot quando o componente for desmontado
+      document.body.removeChild(script);
+      document.body.removeChild(chatConfig);
+    };
+  }, []);
+
   return (
-    <div className="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-900">
+    <div className="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-900 relative">
       {/* Seção de Introdução */}
       <section className="min-h-screen flex flex-col justify-center bg-gradient-to-r from-teal-500 via-blue-500 to-indigo-600 text-white text-center py-16 transform hover:scale-105 transition-all duration-700">
         <h1 className="text-6xl font-extrabold tracking-wide mb-6 animate__animated animate__fadeIn animate__delay-1s sm:text-5xl md:text-6xl">Samuel Oliveira</h1>
         <p className="text-2xl font-semibold mb-8 animate__animated animate__fadeIn animate__delay-2s sm:text-xl">Desenvolvedor Full-Stack | Especialista em Node.js, React e muito mais!</p>
+
+        {/* Seção do Chatbot (entre o título e o botão "Ver Projetos") */}
+        <div className="py-8">
+          <h2 className="text-3xl font-semibold text-white mb-6 sm:text-2xl">Estou Aqui Para Ajudar!</h2>
+          <p className="text-xl mb-6 sm:text-lg text-white">Precisa de informações sobre meus projetos ou quer conversar? Fique à vontade para falar comigo!</p>
+
+          {/* Contêiner do chatbot */}
+          <div className="flex justify-center items-center">
+            <div className="w-full max-w-md h-80 bg-white rounded-2xl shadow-lg border-2 border-gray-300 relative">
+              <div id="chatling-chatbot" className="w-full h-full bg-white rounded-xl overflow-hidden shadow-lg border-2 border-gray-300"></div>
+
+              {/* Botão de Abertura do Chatbot */}
+              <div className="absolute bottom-4 left-4">
+                <button 
+                  onClick={() => document.getElementById('chatling-chatbot')?.classList.toggle('hidden')}
+                  className="bg-green-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-600 transition-all"
+                >
+                  Iniciar Chat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Botão "Ver Projetos" */}
         <a
           href="#projetos"
           className="inline-block px-8 py-4 text-lg font-semibold bg-white text-gray-900 rounded-xl shadow-xl hover:scale-110 transition-transform transform hover:shadow-2xl animate__animated animate__fadeIn animate__delay-3s sm:px-6 sm:py-3"
         >
           Ver Projetos
         </a>
-      </section>
-
-      {/* Seção de Sobre Mim */}
-      <section id="sobre" className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-semibold text-gray-900 mb-6 sm:text-3xl">Sobre Mim</h2>
-          <p className="text-xl text-gray-700 leading-relaxed mb-6 sm:text-lg">
-            Sou um desenvolvedor apaixonado por tecnologia, com experiência em projetos de larga escala
-            utilizando Node.js, React, TypeScript e outras tecnologias. Meu objetivo é criar soluções inovadoras
-            que impactem positivamente os usuários e empresas.
-          </p>
-        </div>
       </section>
 
       {/* Seção de Projetos */}
@@ -96,31 +132,6 @@ const Page: FC = () => {
                 Ver no GitHub
               </a>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Seção de Habilidades */}
-      <section id="habilidades" className="py-24 px-6 bg-gradient-to-b from-white to-gray-100">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-semibold text-gray-900 mb-10 sm:text-3xl">Habilidades</h2>
-          <div className="flex flex-wrap justify-center space-x-12 sm:space-x-8">
-            <div className="text-center transform hover:scale-110 transition-all duration-300">
-              <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">React</h3>
-              <div className="text-7xl text-blue-600">⚛️</div>
-            </div>
-            <div className="text-center transform hover:scale-110 transition-all duration-300">
-              <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">Node.js</h3>
-              <div className="text-7xl text-green-600">🌿</div>
-            </div>
-            <div className="text-center transform hover:scale-110 transition-all duration-300">
-              <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">TypeScript</h3>
-              <div className="text-7xl text-blue-500">🟦</div>
-            </div>
-            <div className="text-center transform hover:scale-110 transition-all duration-300">
-             <h3 className="text-xl font-semibold text-gray-800 sm:text-lg">Go</h3>
-            <div className="text-7xl text-orange-600">🐹</div> {/* Emoji do mascote do Go */}
-             </div>
           </div>
         </div>
       </section>
