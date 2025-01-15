@@ -2,7 +2,11 @@
 
 import { useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
+<<<<<<< HEAD
 import "./globals.css";
+=======
+import "./globals.css"; // Certifique-se de que este caminho está correto
+>>>>>>> 32adbc0021829be2bd58c473ced93e4f65838f6d
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
