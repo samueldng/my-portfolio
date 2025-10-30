@@ -1,16 +1,12 @@
-import type { Config } from "tailwindcss";
+import type { NextConfig } from "next";
 
-export default {
-  content: [
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",  // Caminho correto para o Next.js 13 com app directory
-  ],
-  theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
+const nextConfig: NextConfig = {
+  /* config options here */
+  reactStrictMode: true,
+  images: {
+    domains: ['images.unsplash.com'],
   },
-  plugins: [],
-} satisfies Config;
+  // Add any other Next.js config options here
+};
+
+export default nextConfig;

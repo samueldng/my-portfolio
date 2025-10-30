@@ -1,6 +1,5 @@
-'use client'; // Certifique-se de que está habilitado para o uso de hooks no lado do cliente
+'use client';
 
-import { useEffect } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
@@ -19,49 +18,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    // Carregar o script do chatbot quando o componente for montado
-    const script = document.createElement('script');
-    script.src = "https://chatling.ai/js/embed.js";
-    script.async = true;
-    script.dataset.id = "4873935879"; // Seu chatbotId
-    script.dataset.display = "fullscreen"; // Exibição fullscreen
-    document.body.appendChild(script);
-  
-    // Adicionar a configuração do Chatbot, se necessário
-    const chatConfig = document.createElement('script');
-    chatConfig.innerHTML = `
-      window.chtlConfig = { 
-        chatbotId: "4873935879", 
-        display: "fullscreen", 
-        theme: { 
-          color: "#4caf50", 
-          backgroundColor: "#ffffff", 
-          button: { 
-            backgroundColor: "#4caf50", 
-            textColor: "#ffffff" 
-          } 
-        }
-      };
-    `;
-    document.body.appendChild(chatConfig);
-  
-    return () => {
-      // Remover o script do chatbot quando o componente for desmontado
-      document.body.removeChild(script);
-      document.body.removeChild(chatConfig);
-    };
-  }, []);
-
   return (
     <html lang="pt-br">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Portfólio profissional de Samuel Oliveira - Desenvolvedor Full-Stack especializado em Node.js, React e tecnologias modernas" />
+        <meta name="keywords" content="desenvolvedor, full-stack, node.js, react, javascript, typescript, portfolio" />
+        <meta name="author" content="Samuel Oliveira" />
         <title>Samuel Oliveira - Portfolio</title>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-white text-gray-900 antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-gray-900 text-gray-100 antialiased`}>
         {children}
       </body>
     </html>
