@@ -28,15 +28,6 @@ export default function MagneticButton({ children, className, onClick }: Magneti
       setPosition({ x: deltaX, y: deltaY });
     };
 
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-      setPosition({ x: 0, y: 0 });
-    };
-
     window.addEventListener('mousemove', handleMouseMove);
     
     return () => {

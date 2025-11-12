@@ -146,9 +146,9 @@ const Page = () => {
 
   // Skills data
   const skills = [
-    { name: "Frontend", icon: <Code />, level: 95 },
-    { name: "Backend", icon: <Server />, level: 90 },
-    { name: "Mobile", icon: <Smartphone />, level: 85 },
+    { name: "frontend", icon: Code, level: 95 },
+    { name: "backend", icon: Server, level: 90 },
+    { name: "mobile", icon: Smartphone, level: 85 },
   ];
 
   // Initialize chatbot
@@ -410,30 +410,16 @@ const Page = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <MagneticButton>
-              <SkillCard 
-                title={t('skills.frontend')} 
-                level={95} 
-                icon={Code} 
-                description={t('skills.frontend.desc')}
-              />
-            </MagneticButton>
-            <MagneticButton>
-              <SkillCard 
-                title={t('skills.backend')} 
-                level={90} 
-                icon={Server} 
-                description={t('skills.backend.desc')}
-              />
-            </MagneticButton>
-            <MagneticButton>
-              <SkillCard 
-                title={t('skills.mobile')} 
-                level={85} 
-                icon={Smartphone} 
-                description={t('skills.mobile.desc')}
-              />
-            </MagneticButton>
+            {skills.map((skill) => (
+              <MagneticButton key={skill.name}>
+                <SkillCard 
+                  title={t(`skills.${skill.name.toLowerCase()}`)} 
+                  level={skill.level} 
+                  icon={skill.icon} 
+                  description={t(`skills.${skill.name.toLowerCase()}.desc`)}
+                />
+              </MagneticButton>
+            ))}
           </div>
 
           {/* Tech stack */}
@@ -446,13 +432,13 @@ const Page = () => {
           >
             <h3 className="text-2xl font-bold text-center mb-8 cursor-gradient">{t('skills.techStack')}</h3>
             <div className="flex flex-wrap justify-center gap-4">
-              {['React', 'Node.js', 'TypeScript', 'Next.js', 'Tailwind CSS', 'MongoDB', 'PostgreSQL', 'Docker'].map((tech, index) => (
+              {['React', 'Node.js', 'TypeScript', 'Next.js', 'Tailwind CSS', 'MongoDB', 'PostgreSQL', 'Docker'].map((tech) => (
                 <MagneticButton key={tech}>
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    transition={{ duration: 0.3, delay: 0 }}
                     whileHover={{ 
                       scale: 1.1, 
                       y: -5,
