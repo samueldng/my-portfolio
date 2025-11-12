@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 function AnimatedSphere() {
@@ -42,6 +42,20 @@ function Scene() {
 }
 
 export default function ThreeHero() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <div className="text-cyan-400">Loading 3D content...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full">
       <Canvas className="w-full h-full">
