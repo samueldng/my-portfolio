@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot } from "lucide-react";
 import Image from "next/image";
 import { gsap } from "gsap";
-import ThreeHero from "@/components/ThreeHero";
 import SkillCard from "@/components/SkillCard";
 import ProjectCard from "@/components/ProjectCard";
 import AIChatModal from "@/components/AIChatModal";
@@ -13,6 +12,13 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
 import MagneticButton from "@/components/MagneticButton";
+import dynamic from 'next/dynamic';
+
+// Dynamically import ThreeHero to avoid SSR issues
+const ThreeHero = dynamic(() => import('@/components/ThreeHero'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900"></div>
+});
 
 const Page = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -54,9 +60,9 @@ const Page = () => {
       if (profilePhoto) {
         // Set initial position above the screen and hidden
         gsap.set(profilePhoto, { 
-          y: -1200, 
+          y: -200, 
           opacity: 0,
-          scale: 0.9
+          scale: 0.8
         });
         
         // Animate falling with bounce effect and scale up
@@ -64,9 +70,9 @@ const Page = () => {
           y: 0,
           opacity: 1,
           scale: 1,
-          duration: 3.5,
+          duration: 1.5,
           ease: "bounce.out",
-          delay: 0.2
+          delay: 0.5
         });
       }
       
