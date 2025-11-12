@@ -56,6 +56,33 @@ body.interactive-mode {
   }
 }
 
+/* Custom cursor classes */
+.cursor-magnetic {
+  cursor: none;
+}
+
+.cursor-hover {
+  cursor: none;
+}
+
+.cursor-gradient {
+  cursor: none;
+}
+
+/* Custom animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
 /* Interactive mode specific styles */
 body.interactive-mode .interactive-bg::before {
   content: "";

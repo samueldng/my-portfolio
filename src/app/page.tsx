@@ -2,17 +2,27 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp, FaArrowUp, FaCode, FaMobile, FaServer } from "react-icons/fa";
+import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot } from "lucide-react";
 import Image from "next/image";
 import { gsap } from "gsap";
+import ThreeHero from "@/components/ThreeHero";
+import SkillCard from "@/components/SkillCard";
+import ProjectCard from "@/components/ProjectCard";
+import AIChatModal from "@/components/AIChatModal";
+import { useLanguage } from '@/contexts/LanguageContext';
+import CustomCursor from "@/components/CustomCursor";
+import ParticleBackground from "@/components/ParticleBackground";
+import MagneticButton from "@/components/MagneticButton";
 
 const Page = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showChatbot, setShowChatbot] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const { language, toggleLanguage, t } = useLanguage();
   
   // Parallax refs
   const heroRef = useRef(null);
@@ -95,9 +105,9 @@ const Page = () => {
 
   // Skills data
   const skills = [
-    { name: "Frontend", icon: <FaCode />, level: 95 },
-    { name: "Backend", icon: <FaServer />, level: 90 },
-    { name: "Mobile", icon: <FaMobile />, level: 85 },
+    { name: "Frontend", icon: <Code />, level: 95 },
+    { name: "Backend", icon: <Server />, level: 90 },
+    { name: "Mobile", icon: <Smartphone />, level: 85 },
   ];
 
   // Initialize chatbot
@@ -137,9 +147,15 @@ const Page = () => {
 
   return (
     <div ref={containerRef} className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-gray-100 overflow-x-hidden">
+      {/* Custom Cursor */}
+      <CustomCursor />
+      
+      {/* Particle Background */}
+      <ParticleBackground />
+      
       {/* Progress bar */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-blue-600 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 z-50 origin-left"
         style={{ scaleX: pathLength }}
       />
       
@@ -151,82 +167,76 @@ const Page = () => {
         className="fixed top-0 w-full z-40 bg-black/20 backdrop-blur-md py-4 px-6"
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
-            className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent"
-          >
-            Samuel O.
-          </motion.div>
+          <MagneticButton>
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent cursor-gradient"
+            >
+              Samuel O.
+            </motion.div>
+          </MagneticButton>
           
           <div className="hidden md:flex space-x-8">
             {['Home', 'Skills', 'Projetos', 'Contato'].map((item) => (
-              <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className={`transition-all duration-300 nav-link ${
-                  activeSection === item.toLowerCase() 
-                    ? 'text-teal-400 font-semibold' 
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {item}
-              </motion.a>
+              <MagneticButton key={item}>
+                <motion.a
+                  href={`#${item.toLowerCase()}`}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`transition-all duration-300 nav-link cursor-hover ${
+                    activeSection === item.toLowerCase() 
+                      ? 'text-cyan-400 font-semibold' 
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  {t(`nav.${item.toLowerCase()}`)}
+                </motion.a>
+              </MagneticButton>
             ))}
           </div>
           
-          {/* Contato button removed as requested */}
+          <div className="flex items-center space-x-3">
+            {/* AI Chat Button */}
+            <MagneticButton>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsChatModalOpen(true)}
+                className="p-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg hover:shadow-cyan-500/30 transition-all cursor-magnetic"
+                aria-label="Open AI Chat"
+              >
+                <Bot className="h-5 w-5" />
+              </motion.button>
+            </MagneticButton>
+            
+            {/* Language Toggle Button */}
+            <MagneticButton>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={toggleLanguage}
+                className="p-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg hover:shadow-cyan-500/30 transition-all flex items-center cursor-gradient"
+                aria-label="Toggle language"
+              >
+                <Languages className="h-5 w-5" />
+                <span className="ml-2 text-sm font-medium">
+                  {language === 'pt' ? 'EN' : 'PT'}
+                </span>
+              </motion.button>
+            </MagneticButton>
+          </div>
         </div>
       </motion.nav>
 
-      {/* Hero Section with Parallax */}
+      {/* Hero Section with 3D Background */}
       <section 
         id="home" 
         ref={heroRef}
         className="min-h-screen flex flex-col justify-center relative overflow-hidden"
       >
-        {/* Animated background elements with parallax */}
+        {/* 3D Background */}
         <div className="absolute inset-0 z-0">
-          <motion.div 
-            ref={parallaxRef1}
-            className="absolute top-1/4 left-1/4 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-          <motion.div 
-            ref={parallaxRef2}
-            className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
-            animate={{
-              x: [0, -100, 0],
-              y: [0, 100, 0],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-          <motion.div 
-            ref={parallaxRef3}
-            className="absolute top-1/2 left-1/2 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
-            animate={{
-              x: [0, 50, 0],
-              y: [0, -50, 0],
-            }}
-            transition={{
-              duration: 30,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
+          <ThreeHero />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 z-10 relative">
@@ -236,38 +246,40 @@ const Page = () => {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-              className="relative inline-block mb-6"
-            >
-              <div className="w-32 h-32 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 p-1 mx-auto">
-                <div className="bg-gray-800 rounded-full w-full h-full overflow-hidden">
-                  {/* Your photo here */}
-                  <Image
-                    src="/foto.jpeg"
-                    alt="Samuel Oliveira"
-                    width={124}
-                    height={124}
-                    className="object-cover w-full h-full rounded-full"
-                  />
-                </div>
-              </div>
-              <motion.div 
-                className="absolute -top-2 -right-2 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: "reverse"
-                }}
+            <MagneticButton>
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+                className="relative inline-block mb-6 cursor-magnetic"
               >
-                <div className="w-3 h-3 bg-white rounded-full"></div>
+                <div className="w-32 h-32 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 p-1 mx-auto">
+                  <div className="bg-gray-800 rounded-full w-full h-full overflow-hidden">
+                    {/* Your photo here */}
+                    <Image
+                      src="/foto.jpeg"
+                      alt="Samuel Oliveira"
+                      width={124}
+                      height={124}
+                      className="object-cover w-full h-full rounded-full"
+                    />
+                  </div>
+                </div>
+                <motion.div 
+                  className="absolute -top-2 -right-2 w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center"
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                >
+                  <div className="w-3 h-3 bg-white rounded-full"></div>
+                </motion.div>
               </motion.div>
-            </motion.div>
+            </MagneticButton>
             
             <motion.h1 
               className="text-5xl md:text-7xl font-extrabold mb-6"
@@ -275,8 +287,8 @@ const Page = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <span className="block bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-500 bg-clip-text text-transparent">
-                Samuel Oliveira
+              <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 bg-clip-text text-transparent cursor-gradient">
+                {t('hero.title')}
               </span>
             </motion.h1>
             
@@ -286,7 +298,7 @@ const Page = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              Desenvolvedor Full-Stack especializado em criar experiências digitais excepcionais com Node.js, React e tecnologias modernas
+              {t('hero.subtitle')}
             </motion.p>
             
             <motion.div
@@ -295,35 +307,39 @@ const Page = () => {
               transition={{ delay: 0.8 }}
               className="flex flex-wrap justify-center gap-4"
             >
-              <motion.a
-                href="#projetos"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)" }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-gradient-to-r from-teal-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all"
-              >
-                Ver Projetos
-              </motion.a>
+              <MagneticButton>
+                <motion.a
+                  href="#projetos"
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all cursor-magnetic"
+                >
+                  {t('hero.viewProjects')}
+                </motion.a>
+              </MagneticButton>
               
-              <motion.a
-                href="#contato"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)" }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-transparent border-2 border-teal-500 text-teal-400 font-medium rounded-full hover:bg-teal-500/10 transition-all"
-              >
-                Entrar em Contato
-              </motion.a>
+              <MagneticButton>
+                <motion.a
+                  href="#contato"
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 bg-transparent border-2 border-cyan-500 text-cyan-400 font-medium rounded-full hover:bg-cyan-500/10 transition-all cursor-magnetic"
+                >
+                  {t('hero.contactMe')}
+                </motion.a>
+              </MagneticButton>
             </motion.div>
           </motion.div>
         </div>
         
         {/* Scroll indicator */}
         <motion.div 
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-hover"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
-          <div className="w-6 h-10 rounded-full border-2 border-teal-400 flex justify-center">
-            <div className="w-1 h-1 bg-teal-400 rounded-full mt-2 animate-pulse"></div>
+          <div className="w-6 h-10 rounded-full border-2 border-cyan-400 flex justify-center">
+            <div className="w-1 h-1 bg-cyan-400 rounded-full mt-2 animate-pulse"></div>
           </div>
         </motion.div>
       </section>
@@ -347,44 +363,40 @@ const Page = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent">
-                Minhas Habilidades
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent cursor-gradient">
+                {t('skills.title')}
               </span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Tecnologias e ferramentas que domino para criar soluções digitais de alta qualidade
+              {t('skills.subtitle')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {skills.map((skill, index) => (
-              <motion.div
-                key={skill.name}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 shadow-lg hover:shadow-xl transition-all"
-              >
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center text-white text-xl">
-                    {skill.icon}
-                  </div>
-                  <h3 className="text-xl font-bold ml-4">{skill.name}</h3>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2.5 mb-2">
-                  <motion.div 
-                    className="bg-gradient-to-r from-teal-500 to-blue-600 h-2.5 rounded-full"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                  ></motion.div>
-                </div>
-                <p className="text-gray-400">{skill.level}% Proficiência</p>
-              </motion.div>
-            ))}
+            <MagneticButton>
+              <SkillCard 
+                title={t('skills.frontend')} 
+                level={95} 
+                icon={Code} 
+                description={t('skills.frontend.desc')}
+              />
+            </MagneticButton>
+            <MagneticButton>
+              <SkillCard 
+                title={t('skills.backend')} 
+                level={90} 
+                icon={Server} 
+                description={t('skills.backend.desc')}
+              />
+            </MagneticButton>
+            <MagneticButton>
+              <SkillCard 
+                title={t('skills.mobile')} 
+                level={85} 
+                icon={Smartphone} 
+                description={t('skills.mobile.desc')}
+              />
+            </MagneticButton>
           </div>
 
           {/* Tech stack */}
@@ -395,31 +407,32 @@ const Page = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-16"
           >
-            <h3 className="text-2xl font-bold text-center mb-8">Tecnologias que utilizo</h3>
+            <h3 className="text-2xl font-bold text-center mb-8 cursor-gradient">{t('skills.techStack')}</h3>
             <div className="flex flex-wrap justify-center gap-4">
               {['React', 'Node.js', 'TypeScript', 'Next.js', 'Tailwind CSS', 'MongoDB', 'PostgreSQL', 'Docker'].map((tech, index) => (
-                <motion.div
-                  key={tech}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ 
-                    scale: 1.1, 
-                    y: -5,
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)"
-                  }}
-                  className="px-4 py-2 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 text-gray-300 tech-stack-item"
-                >
-                  {tech}
-                </motion.div>
+                <MagneticButton key={tech}>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    whileHover={{ 
+                      scale: 1.1, 
+                      y: -5,
+                      boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)"
+                    }}
+                    className="px-4 py-2 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 text-gray-300 tech-stack-item cursor-magnetic"
+                  >
+                    {tech}
+                  </motion.div>
+                </MagneticButton>
               ))}
             </div>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* Projects Section with Parallax */}
+      {/* Projects Section */}
       <motion.section 
         id="projetos"
         ref={projectsRef}
@@ -438,150 +451,43 @@ const Page = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent">
-                Meus Projetos
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent cursor-gradient">
+                {t('projects.title')}
               </span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Uma seleção dos meus trabalhos mais recentes e impactantes
+              {t('projects.subtitle')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Project 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              whileHover={{ y: -10, boxShadow: "0 20px 25px rgba(0, 0, 0, 0.3)" }}
-              className="bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/30 shadow-lg hover:shadow-xl transition-all duration-300 project-card"
-            >
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  alt="Screenshot do projeto Nell App"
-                  src="/images/projeto1.png" 
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="transition-transform duration-500 hover:scale-110"
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">Nell App</h3>
-                <p className="text-gray-400 mb-4">Aplicação completa de gestão e controle de estoque com dashboard em tempo real</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['React', 'Node.js', 'MongoDB'].map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-teal-500/20 text-teal-400 rounded text-xs">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href="https://github.com/samueldng/nell-app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-teal-400 hover:text-teal-300 font-medium"
-                >
-                  Ver no GitHub
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Project 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={{ y: -10, boxShadow: "0 20px 25px rgba(0, 0, 0, 0.3)" }}
-              className="bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/30 shadow-lg hover:shadow-xl transition-all duration-300 project-card"
-            >
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  alt="Screenshot do projeto SIS Frota"
-                  src="/images/projeto2.png" 
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="transition-transform duration-500 hover:scale-110"
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">SIS Frota</h3>
-                <p className="text-gray-400 mb-4">Sistema completo de gestão e conferência de frotas veiculares com geolocalização</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['React Native', 'Node.js', 'PostgreSQL'].map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-teal-500/20 text-teal-400 rounded text-xs">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href="https://github.com/samueldng/Rvehicle-photo-app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-teal-400 hover:text-teal-300 font-medium"
-                >
-                  Ver no GitHub
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Project 3 - Corrected technologies */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              whileHover={{ y: -10, boxShadow: "0 20px 25px rgba(0, 0, 0, 0.3)" }}
-              className="bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/30 shadow-lg hover:shadow-xl transition-all duration-300 project-card"
-            >
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  alt="Screenshot do projeto Squid Game"
-                  src="/images/projeto3.png" 
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="transition-transform duration-500 hover:scale-110"
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">Squid Game</h3>
-                <p className="text-gray-400 mb-4">Jogo interativo baseado na famosa série Round 6 com mecânicas envolventes</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['JavaScript', 'TypeScript', 'CSS'].map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-teal-500/20 text-teal-400 rounded text-xs">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href="https://github.com/samueldng/round6"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-teal-400 hover:text-teal-300 font-medium"
-                >
-                  Ver no GitHub
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
+            <MagneticButton>
+              <ProjectCard
+                title="Nell App"
+                description={t('project.nell.description')}
+                technologies={['React', 'Node.js', 'MongoDB']}
+                imageUrl="/images/projeto1.png"
+                githubUrl="https://github.com/samueldng/nell-app"
+              />
+            </MagneticButton>
+            <MagneticButton>
+              <ProjectCard
+                title="SIS Frota"
+                description={t('project.sis.description')}
+                technologies={['React Native', 'Node.js', 'PostgreSQL']}
+                imageUrl="/images/projeto2.png"
+                githubUrl="https://github.com/samueldng/Rvehicle-photo-app"
+              />
+            </MagneticButton>
+            <MagneticButton>
+              <ProjectCard
+                title="Squid Game"
+                description={t('project.squid.description')}
+                technologies={['JavaScript', 'TypeScript', 'CSS']}
+                imageUrl="/images/projeto3.png"
+                githubUrl="https://github.com/samueldng/round6"
+              />
+            </MagneticButton>
           </div>
         </div>
       </motion.section>
@@ -603,12 +509,12 @@ const Page = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent">
-                Assistente Virtual
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                {t('chat.title')}
               </span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Converse com meu assistente para saber mais sobre meus projetos e habilidades
+              {t('chat.subtitle')}
             </p>
           </motion.div>
 
@@ -625,9 +531,9 @@ const Page = () => {
                 </h3>
                 <button 
                   onClick={() => setShowChatbot(!showChatbot)}
-                  className="px-4 py-2 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-full text-sm hover:opacity-90 transition-opacity"
+                  className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-full text-sm hover:opacity-90 transition-opacity"
                 >
-                  {showChatbot ? 'Ocultar Chat' : 'Mostrar Chat'}
+                  {showChatbot ? t('chat.hide') : t('chat.show')}
                 </button>
               </div>
               
@@ -635,7 +541,7 @@ const Page = () => {
                 <div className="mt-4">
                   <div className="bg-white/5 rounded-xl p-4 border border-gray-700/50 mb-4">
                     <div className="flex items-center space-x-2 mb-3">
-                      <div className="w-3 h-3 bg-teal-400 rounded-full animate-pulse"></div>
+                      <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
                       <span className="text-xs text-gray-400">Assistente Virtual Online</span>
                     </div>
                     <p className="text-gray-300 text-sm">
@@ -651,10 +557,11 @@ const Page = () => {
               {!showChatbot && (
                 <div className="mt-4 text-center py-8">
                   <button 
-                    onClick={() => setShowChatbot(true)}
-                    className="px-6 py-3 bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-full text-sm hover:opacity-90 transition-opacity"
+                    onClick={() => setIsChatModalOpen(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-full text-sm hover:opacity-90 transition-opacity flex items-center mx-auto"
                   >
-                    Iniciar Conversa com IA
+                    <Bot className="h-4 w-4 mr-2" />
+                    {t('chat.start')}
                   </button>
                 </div>
               )}
@@ -681,12 +588,12 @@ const Page = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent">
-                Entre em Contato
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent cursor-gradient">
+                {t('contact.title')}
               </span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Vamos conversar sobre seu próximo projeto ou oportunidade
+              {t('contact.subtitle')}
             </p>
           </motion.div>
 
@@ -697,31 +604,35 @@ const Page = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h3 className="text-2xl font-bold mb-6">Vamos trabalhar juntos!</h3>
+              <h3 className="text-2xl font-bold mb-6">{t('contact.workTogether')}</h3>
               <p className="text-gray-400 mb-8">
-                Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades para fazer parte da sua equipe.
+                {t('contact.description')}
               </p>
               
               <div className="space-y-4">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center mr-4">
-                    <FaEnvelope className="text-white" />
+                <MagneticButton>
+                  <div className="flex items-center cursor-magnetic">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mr-4">
+                      <Mail className="text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">{t('contact.email')}</h4>
+                      <p className="text-gray-400">samuel-dng@outlook.com</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold">Email</h4>
-                    <p className="text-gray-400">samuel-dng@outlook.com</p>
-                  </div>
-                </div>
+                </MagneticButton>
                 
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center mr-4">
-                    <FaWhatsapp className="text-white" />
+                <MagneticButton>
+                  <div className="flex items-center cursor-magnetic">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mr-4">
+                      <Phone className="text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">{t('contact.whatsapp')}</h4>
+                      <p className="text-gray-400">+55 (99) 98514-3916</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold">WhatsApp</h4>
-                    <p className="text-gray-400">+55 (99) 98514-3916</p>
-                  </div>
-                </div>
+                </MagneticButton>
               </div>
             </motion.div>
             
@@ -732,35 +643,39 @@ const Page = () => {
               transition={{ duration: 0.6 }}
               className="flex flex-wrap justify-center gap-8"
             >
-              <motion.a
-                href="https://github.com/samueldng"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -5, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex flex-col items-center p-6 bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/30 hover:border-teal-500/50 transition-all group w-40"
-              >
-                <div className="w-16 h-16 rounded-full bg-gray-700/50 flex items-center justify-center group-hover:bg-teal-500/10 transition-colors mb-4">
-                  <FaGithub className="text-2xl text-gray-300 group-hover:text-teal-400 transition-colors" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">GitHub</h3>
-                <p className="text-gray-400 text-sm">@samueldng</p>
-              </motion.a>
+              <MagneticButton>
+                <motion.a
+                  href="https://github.com/samueldng"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex flex-col items-center p-6 bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/30 hover:border-cyan-500/50 transition-all group w-40 cursor-magnetic"
+                >
+                  <div className="w-16 h-16 rounded-full bg-gray-700/50 flex items-center justify-center group-hover:bg-cyan-500/10 transition-colors mb-4">
+                    <Github className="text-2xl text-gray-300 group-hover:text-cyan-400 transition-colors" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">GitHub</h3>
+                  <p className="text-gray-400 text-sm">@samueldng</p>
+                </motion.a>
+              </MagneticButton>
 
-              <motion.a
-                href="https://www.linkedin.com/in/samuel-oliveira-26bb7014a/"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -5, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex flex-col items-center p-6 bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/30 hover:border-teal-500/50 transition-all group w-40"
-              >
-                <div className="w-16 h-16 rounded-full bg-gray-700/50 flex items-center justify-center group-hover:bg-teal-500/10 transition-colors mb-4">
-                  <FaLinkedin className="text-2xl text-gray-300 group-hover:text-teal-400 transition-colors" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">LinkedIn</h3>
-                <p className="text-gray-400 text-sm">Samuel Oliveira</p>
-              </motion.a>
+              <MagneticButton>
+                <motion.a
+                  href="https://www.linkedin.com/in/samuel-oliveira-26bb7014a/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex flex-col items-center p-6 bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/30 hover:border-cyan-500/50 transition-all group w-40 cursor-magnetic"
+                >
+                  <div className="w-16 h-16 rounded-full bg-gray-700/50 flex items-center justify-center group-hover:bg-cyan-500/10 transition-colors mb-4">
+                    <Linkedin className="text-2xl text-gray-300 group-hover:text-cyan-400 transition-colors" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">LinkedIn</h3>
+                  <p className="text-gray-400 text-sm">Samuel Oliveira</p>
+                </motion.a>
+              </MagneticButton>
             </motion.div>
           </div>
         </div>
@@ -769,7 +684,7 @@ const Page = () => {
       {/* Footer */}
       <footer className="py-8 text-center text-gray-500 text-sm border-t border-gray-800/50">
         <div className="max-w-7xl mx-auto px-6">
-          <p>© {new Date().getFullYear()} Samuel Oliveira. Todos os direitos reservados.</p>
+          <p>{t('footer.copyright').replace('{year}', new Date().getFullYear().toString())}</p>
         </div>
       </footer>
 
@@ -783,12 +698,16 @@ const Page = () => {
             exit={{ opacity: 0, scale: 0 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 text-white flex items-center justify-center shadow-lg z-50"
+            className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-lg z-50"
           >
-            <FaArrowUp />
+            <ArrowUp />
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* AI Chat Modal */}
+      <AIChatModal isOpen={isChatModalOpen} onClose={() => setIsChatModalOpen(false)} />
+
     </div>
   );
 };
