@@ -39,26 +39,35 @@ export default function ParticleBackground() {
         this.canvasHeight = canvasHeight;
         this.x = Math.random() * canvasWidth;
         this.y = Math.random() * canvasHeight;
-        this.size = Math.random() * 2 + 0.5;
+        this.size = Math.random() * 3 + 1;
         this.originalSize = this.size;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.color = `rgba(34, 211, 238, ${Math.random() * 0.5 + 0.1})`;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.color = `rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2})`;
       }
 
       update(mouseX: number, mouseY: number) {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Bounce off edges
-        if (this.x < 0 || this.x > this.canvasWidth) this.speedX *= -1;
-        if (this.y < 0 || this.y > this.canvasHeight) this.speedY *= -1;
+        // Reset particle to top when it goes off screen
+        if (this.y > this.canvasHeight) {
+          this.y = -10;
+          this.x = Math.random() * this.canvasWidth;
+        }
+        
+        // Reset particle to side when it goes off screen horizontally
+        if (this.x > this.canvasWidth) {
+          this.x = -10;
+        } else if (this.x < -10) {
+          this.x = this.canvasWidth + 10;
+        }
 
-        // Mouse interaction
+        // Mouse interaction - particles move away from mouse
         const mouse = {
           x: mouseX || this.canvasWidth / 2,
           y: mouseY || this.canvasHeight / 2,
-          radius: 100
+          radius: 80
         };
 
         const dx = mouse.x - this.x;
@@ -66,12 +75,18 @@ export default function ParticleBackground() {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < mouse.radius) {
+          // Move particle away from mouse
           const force = (mouse.radius - distance) / mouse.radius;
-          this.size = this.originalSize + force * 3;
-          this.color = `rgba(129, 140, 248, ${force * 0.8 + 0.1})`;
+          const angle = Math.atan2(dy, dx);
+          
+          // Push particle away from mouse
+          this.x -= Math.cos(angle) * force * 3;
+          this.y -= Math.sin(angle) * force * 3;
+          
+          // Make particle slightly smaller when interacting
+          this.size = this.originalSize * (1 - force * 0.3);
         } else {
           this.size = this.originalSize;
-          this.color = `rgba(34, 211, 238, ${Math.random() * 0.5 + 0.1})`;
         }
       }
 
@@ -116,10 +131,10 @@ export default function ParticleBackground() {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 100) {
-            const opacity = 1 - distance / 100;
-            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity * 0.2})`;
-            ctx.lineWidth = 0.5;
+          if (distance < 80) {
+            const opacity = 1 - distance / 80;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.1})`;
+            ctx.lineWidth = 0.3;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);

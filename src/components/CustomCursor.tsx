@@ -156,11 +156,10 @@ export default function CustomCursor() {
           {variant === 'gradient' && (
             <div className="absolute inset-0 rounded-full animate-spin-slow">
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 opacity-70 blur-md"></div>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-70 blur-md animate-pulse"></div>
             </div>
           )}
         </motion.div>
-      )}
+      )} 
       
       {/* Cursor follower for trailing effect */}
       {isVisible && (

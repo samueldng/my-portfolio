@@ -46,6 +46,47 @@ const Page = () => {
       });
     }
 
+    // Falling animation for profile photo
+    const animateProfilePhoto = () => {
+      const profilePhoto = document.getElementById('profile-photo');
+      const notificationDot = profilePhoto?.querySelector('div.absolute div');
+      
+      if (profilePhoto) {
+        // Set initial position above the screen and hidden
+        gsap.set(profilePhoto, { 
+          y: -1200, 
+          opacity: 0,
+          scale: 0.9
+        });
+        
+        // Animate falling with bounce effect and scale up
+        gsap.to(profilePhoto, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 3.5,
+          ease: "bounce.out",
+          delay: 0.2
+        });
+      }
+      
+      // Animate the notification dot
+      if (notificationDot) {
+        gsap.to(notificationDot, {
+          scale: 1.2,
+          repeat: -1,
+          yoyo: true,
+          duration: 1,
+          ease: "power1.inOut",
+          delay: 2 // Start after the photo has landed
+        });
+      }
+    };
+
+    // Try to animate immediately, and also after a small delay to ensure DOM is ready
+    animateProfilePhoto();
+    setTimeout(animateProfilePhoto, 100);
+
     // Parallax effect on scroll
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -177,19 +218,24 @@ const Page = () => {
           </MagneticButton>
           
           <div className="hidden md:flex space-x-8">
-            {['Home', 'Skills', 'Projetos', 'Contato'].map((item) => (
-              <MagneticButton key={item}>
+            {[
+              { label: 'Home', key: 'home' },
+              { label: 'Skills', key: 'skills' },
+              { label: 'Projetos', key: 'projetos' },
+              { label: 'Contato', key: 'contato' }
+            ].map((item) => (
+              <MagneticButton key={item.key}>
                 <motion.a
-                  href={`#${item.toLowerCase()}`}
+                  href={`#${item.key}`}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   className={`transition-all duration-300 nav-link cursor-hover ${
-                    activeSection === item.toLowerCase() 
+                    activeSection === item.key 
                       ? 'text-cyan-400 font-semibold' 
                       : 'text-gray-300 hover:text-white'
                   }`}
                 >
-                  {t(`nav.${item.toLowerCase()}`)}
+                  {t(`nav.${item.key === 'projetos' ? 'projects' : item.key === 'contato' ? 'contact' : item.key}`)}
                 </motion.a>
               </MagneticButton>
             ))}
@@ -247,11 +293,10 @@ const Page = () => {
             className="text-center"
           >
             <MagneticButton>
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+              <div
                 className="relative inline-block mb-6 cursor-magnetic"
+                id="profile-photo"
+                style={{ opacity: 0 }}
               >
                 <div className="w-32 h-32 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 p-1 mx-auto">
                   <div className="bg-gray-800 rounded-full w-full h-full overflow-hidden">
@@ -265,20 +310,12 @@ const Page = () => {
                     />
                   </div>
                 </div>
-                <motion.div 
+                <div 
                   className="absolute -top-2 -right-2 w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center"
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
                 >
                   <div className="w-3 h-3 bg-white rounded-full"></div>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             </MagneticButton>
             
             <motion.h1 
