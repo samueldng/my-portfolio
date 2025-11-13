@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import type { Container, Engine } from '@tsparticles/engine';
 import { loadSlim } from '@tsparticles/slim';
 import { tsParticles } from '@tsparticles/engine';
+import { loadPolygonMaskPlugin } from '@tsparticles/plugin-polygon-mask';
 
 const ParticleLogo = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,6 +13,7 @@ const ParticleLogo = () => {
     const initParticles = async () => {
       // Load the slim version of tsparticles
       await loadSlim(tsParticles);
+      await loadPolygonMaskPlugin(tsParticles);
 
       // Check if container exists
       if (!containerRef.current) return;
@@ -55,9 +57,9 @@ const ParticleLogo = () => {
           },
           links: {
             color: "#ffffff",
-            distance: 150,
+            distance: 50,
             enable: true,
-            opacity: 0.5,
+            opacity: 0.8,
             width: 1,
           },
           move: {
@@ -67,7 +69,7 @@ const ParticleLogo = () => {
               default: "bounce" as const,
             },
             random: false,
-            speed: 2,
+            speed: 1,
             straight: false,
           },
           number: {
@@ -75,19 +77,35 @@ const ParticleLogo = () => {
               enable: true,
               area: 800,
             },
-            value: 80,
+            value: 150,
           },
           opacity: {
-            value: 0.5,
+            value: 0.8,
           },
           shape: {
             type: "circle" as const,
           },
           size: {
-            value: { min: 1, max: 5 },
+            value: { min: 2, max: 4 },
           },
         },
         detectRetina: true,
+        polygon: {
+          enable: true,
+          scale: 1,
+          type: "inline",
+          inline: {
+            arrangement: "equidistant"
+          },
+          draw: {
+            enable: false,
+          },
+          move: {
+            radius: 10,
+            type: "path"
+          },
+          url: "M 30 20 C 70 20 70 40 50 50 C 30 60 30 80 70 80",
+        }
       };
 
       // Initialize particles
@@ -109,17 +127,7 @@ const ParticleLogo = () => {
 
   return (
     <div className="relative w-32 h-32 flex items-center justify-center">
-      {/* The "S" letter as the central element */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <span className="text-6xl font-bold text-white" style={{ 
-          fontFamily: 'Arial, sans-serif',
-          textShadow: '0 0 10px rgba(66, 133, 244, 0.7), 0 0 20px rgba(52, 168, 83, 0.5), 0 0 30px rgba(251, 188, 5, 0.3)'
-        }}>
-          S
-        </span>
-      </div>
-      
-      {/* Particle container */}
+      {/* Particle container for the "S" shape */}
       <div 
         id="particle-logo" 
         ref={containerRef} 
