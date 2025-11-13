@@ -12,6 +12,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
 import MagneticButton from "@/components/MagneticButton";
+import ParticleLogo from "@/components/ParticleLogo";
 import dynamic from 'next/dynamic';
 
 // Dynamically import ThreeHero to avoid SSR issues
@@ -217,9 +218,9 @@ const Page = () => {
           <MagneticButton>
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent cursor-gradient"
+              className="cursor-gradient"
             >
-              Samuel O.
+              <ParticleLogo />
             </motion.div>
           </MagneticButton>
           
