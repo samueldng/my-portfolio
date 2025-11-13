@@ -97,10 +97,7 @@ export default function ThreeHero() {
   if (error) {
     return (
       <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl font-bold text-cyan-400 mb-4">3D Portfolio</div>
-          <div className="text-gray-400">Interactive 3D experience</div>
-        </div>
+       
       </div>
     );
   }
