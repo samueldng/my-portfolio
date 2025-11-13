@@ -1,6 +1,6 @@
 'use client';
 
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, RootState } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
 import { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
@@ -8,7 +8,7 @@ import * as THREE from 'three';
 function AnimatedSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
   
-  useFrame((state) => {
+  useFrame((state: RootState) => {
     if (meshRef.current) {
       meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
@@ -56,6 +56,7 @@ export default function ThreeHero() {
     );
   }
 
+  // Add additional error boundary
   return (
     <div className="w-full h-full">
       <Suspense fallback={

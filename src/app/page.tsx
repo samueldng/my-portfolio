@@ -15,7 +15,7 @@ import MagneticButton from "@/components/MagneticButton";
 import dynamic from 'next/dynamic';
 
 // Dynamically import ThreeHero to avoid SSR issues
-const ThreeHero = dynamic(() => import('@/components/ThreeHero'), { 
+const ThreeHero = dynamic(() => import('@/components/ThreeHero').then(mod => mod.default), { 
   ssr: false,
   loading: () => <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900"></div>
 });
