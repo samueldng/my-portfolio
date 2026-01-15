@@ -629,31 +629,42 @@ const Page = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex gap-6 items-start"
+              className="flex flex-col gap-8"
             >
-              <motion.a
-                href="https://github.com/samueldng"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -5 }}
-                className="flex-1 p-8 bg-gray-950 border border-white/10 hover:border-indigo-500 transition-all group text-center"
-              >
-                <Github className="text-4xl text-gray-500 group-hover:text-white mx-auto mb-4 transition-colors" />
-                <h3 className="text-lg font-bold text-white mb-2">GITHUB</h3>
-                <p className="text-gray-500 text-sm font-mono">@samueldng</p>
-              </motion.a>
+              <div className="relative w-32 h-32 bg-gray-900 border-2 border-indigo-500/30 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 mx-auto shadow-2xl shadow-indigo-500/20">
+                <Image
+                  src="/me.png"
+                  alt="Samuel Oliveira"
+                  fill
+                  className="object-cover object-top"
+                />
+              </div>
 
-              <motion.a
-                href="https://www.linkedin.com/in/samuel-oliveira-26bb7014a/"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -5 }}
-                className="flex-1 p-8 bg-gray-950 border border-white/10 hover:border-indigo-500 transition-all group text-center"
-              >
-                <Linkedin className="text-4xl text-gray-500 group-hover:text-white mx-auto mb-4 transition-colors" />
-                <h3 className="text-lg font-bold text-white mb-2">LINKEDIN</h3>
-                <p className="text-gray-500 text-sm font-mono">Samuel Oliveira</p>
-              </motion.a>
+              <div className="flex gap-6 items-start">
+                <motion.a
+                  href="https://github.com/samueldng"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -5 }}
+                  className="flex-1 p-8 bg-gray-950 border border-white/10 hover:border-indigo-500 transition-all group text-center"
+                >
+                  <Github className="text-4xl text-gray-500 group-hover:text-white mx-auto mb-4 transition-colors" />
+                  <h3 className="text-lg font-bold text-white mb-2">GITHUB</h3>
+                  <p className="text-gray-500 text-sm font-mono">@samueldng</p>
+                </motion.a>
+
+                <motion.a
+                  href="https://www.linkedin.com/in/samuel-oliveira-26bb7014a/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -5 }}
+                  className="flex-1 p-8 bg-gray-950 border border-white/10 hover:border-indigo-500 transition-all group text-center"
+                >
+                  <Linkedin className="text-4xl text-gray-500 group-hover:text-white mx-auto mb-4 transition-colors" />
+                  <h3 className="text-lg font-bold text-white mb-2">LINKEDIN</h3>
+                  <p className="text-gray-500 text-sm font-mono">Samuel Oliveira</p>
+                </motion.a>
+              </div>
             </motion.div>
           </div>
         </div>
