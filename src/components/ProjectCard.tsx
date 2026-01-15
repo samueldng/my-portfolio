@@ -11,76 +11,69 @@ interface ProjectCardProps {
   imageUrl: string;
   githubUrl?: string;
   liveUrl?: string;
+  index?: number;
 }
 
-export default function ProjectCard({ 
-  title, 
-  description, 
-  technologies, 
+export default function ProjectCard({
+  title,
+  description,
+  technologies,
   imageUrl,
   githubUrl,
-  liveUrl
+  liveUrl,
+  index = 0
 }: ProjectCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -10 }}
-      className="bg-gray-800/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700/30 shadow-lg hover:shadow-xl transition-all"
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -5, borderColor: 'rgba(99, 102, 241, 0.5)' }}
+      className="bg-gray-950 border border-white/10 overflow-hidden group hover:shadow-2xl transition-all"
     >
-      <div className="bg-transparent border-0 h-full flex flex-col">
-        <div className="relative h-48 overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-500 hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
-        </div>
-        <div className="p-4">
-          <h3 className="text-xl font-bold">{title}</h3>
-          <p className="text-gray-400 mt-2">{description}</p>
-        </div>
-        <div className="px-4 pb-2 flex-grow">
-          <div className="flex flex-wrap gap-2">
-            {technologies.map((tech, index) => (
-              <span 
-                key={index} 
-                className="px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="p-4 pt-2">
-          <div className="flex space-x-3">
+      <div className="relative h-56 overflow-hidden bg-gray-900 border-b border-white/5">
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-2xl font-bold font-mono tracking-tight text-white group-hover:text-indigo-400 transition-colors">
+            {title}
+          </h3>
+          <div className="flex space-x-3 text-gray-500">
             {githubUrl && (
-              <a
-                href={githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                <Github className="h-4 w-4 mr-1" />
-                Code
+              <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-indigo-400 transition-colors">
+                <Github className="h-5 w-5" />
               </a>
             )}
             {liveUrl && (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                <ExternalLink className="h-4 w-4 mr-1" />
-                Live
+              <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="hover:text-indigo-400 transition-colors">
+                <ExternalLink className="h-5 w-5" />
               </a>
             )}
           </div>
+        </div>
+
+        <p className="text-gray-400 text-sm leading-relaxed mb-6 font-light h-12 line-clamp-2">
+          {description}
+        </p>
+
+        <div className="flex flex-wrap gap-2 mt-auto">
+          {technologies.map((tech, index) => (
+            <span
+              key={index}
+              className="px-2 py-1 bg-gray-900 border border-white/10 text-gray-400 text-[10px] uppercase tracking-wider font-mono"
+            >
+              {tech}
+            </span>
+          ))}
         </div>
       </div>
     </motion.div>

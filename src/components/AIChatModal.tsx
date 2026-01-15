@@ -83,53 +83,42 @@ export default function AIChatModal({ isOpen, onClose }: { isOpen: boolean; onCl
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
         >
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-lg"
-          />
-          
           {/* Modal */}
           <motion.div
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0, y: 20 }}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-2xl max-h-[80vh] bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl border border-cyan-500/30 shadow-2xl shadow-cyan-500/20 overflow-hidden flex flex-col"
+            className="relative w-full max-w-2xl max-h-[80vh] bg-gray-950 rounded-lg border border-white/10 shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Glowing border effect */}
-            <div className="absolute inset-0 rounded-2xl pointer-events-none">
-              <div className="absolute inset-0 rounded-2xl shadow-[0_0_30px_10px_rgba(34,211,238,0.3)] opacity-70 animate-pulse"></div>
-            </div>
-            
             {/* Header */}
-            <div className="relative z-10 p-6 border-b border-gray-700/50 bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-md">
+            <div className="relative z-10 p-6 border-b border-white/5 bg-gray-950">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600">
-                    <Bot className="h-6 w-6 text-white" />
+                <div className="flex items-center space-x-4">
+                  <div className="p-2 bg-indigo-600/20 border border-indigo-500/30 rounded-full">
+                    <Bot className="h-5 w-5 text-indigo-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">Assistente Virtual</h3>
-                    <p className="text-sm text-cyan-400">Online agora</p>
+                    <h3 className="text-lg font-bold text-white font-mono tracking-tight">AI ASSISTANT</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <p className="text-xs text-gray-500 uppercase tracking-widest font-mono">System Online</p>
+                    </div>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-full hover:bg-gray-700/50 transition-colors"
+                  className="p-2 hover:bg-white/5 rounded-full transition-colors"
                 >
                   <X className="h-5 w-5 text-gray-400" />
                 </button>
               </div>
             </div>
-            
+
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
@@ -137,80 +126,70 @@ export default function AIChatModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`flex max-w-[80%] ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                      message.sender === 'user' 
-                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 ml-2' 
-                        : 'bg-gradient-to-r from-purple-500 to-pink-600 mr-2'
-                    }`}>
+                  <div className={`flex max-w-[85%] ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${message.sender === 'user'
+                        ? 'bg-indigo-600 ml-4'
+                        : 'bg-gray-800 mr-4 border border-white/10'
+                      }`}>
                       {message.sender === 'user' ? (
                         <User className="h-4 w-4 text-white" />
                       ) : (
-                        <Bot className="h-4 w-4 text-white" />
+                        <Bot className="h-4 w-4 text-indigo-400" />
                       )}
                     </div>
-                    <div className={`px-4 py-3 rounded-2xl ${
-                      message.sender === 'user'
-                        ? 'bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 rounded-br-none'
-                        : 'bg-gradient-to-r from-gray-800 to-gray-700/50 border border-gray-600/30 rounded-bl-none'
-                    }`}>
-                      <p className="text-gray-100">{message.text}</p>
-                      <p className="text-xs text-gray-400 mt-1">
+                    <div className={`px-5 py-4 ${message.sender === 'user'
+                        ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm'
+                        : 'bg-gray-900 border border-white/10 text-gray-300 rounded-2xl rounded-tl-sm'
+                      }`}>
+                      <p className="leading-relaxed text-sm">{message.text}</p>
+                      <p className="text-[10px] opacity-50 mt-2 font-mono uppercase tracking-wider">
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>
                 </motion.div>
               ))}
-              
+
               {isTyping && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex justify-start"
                 >
-                  <div className="flex">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-600 mr-2">
-                      <Bot className="h-4 w-4 text-white" />
-                    </div>
-                    <div className="px-4 py-3 rounded-2xl bg-gradient-to-r from-gray-800 to-gray-700/50 border border-gray-600/30 rounded-bl-none">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                      </div>
-                    </div>
+                  <div className="flex items-center ml-12 gap-1 bg-gray-900 border border-white/10 px-4 py-3 rounded-2xl rounded-tl-sm">
+                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                 </motion.div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
-            
+
             {/* Input */}
-            <div className="relative z-10 p-4 border-t border-gray-700/50 bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-md">
-              <div className="flex items-end space-x-2">
+            <div className="relative z-10 p-6 border-t border-white/5 bg-gray-950">
+              <div className="flex items-end gap-4">
                 <div className="flex-1 relative">
                   <textarea
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Digite sua mensagem..."
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-2xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 resize-none"
+                    placeholder="Type a message..."
+                    className="w-full px-4 py-3 bg-gray-900 border border-white/10 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500/50 resize-none text-sm font-mono rounded-none"
                     rows={1}
                   />
-                  <Sparkles className="absolute right-3 bottom-3 h-5 w-5 text-cyan-400/50" />
                 </div>
                 <button
                   onClick={handleSend}
                   disabled={inputValue.trim() === ''}
-                  className="p-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl hover:from-cyan-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
+                  className="p-3 bg-indigo-600 hover:bg-indigo-700 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className="h-5 w-5 text-white" />
+                  <Send className="h-4 w-4" />
                 </button>
               </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                O assistente virtual pode cometer erros. Use com sabedoria.
+              <p className="text-[10px] text-gray-600 mt-4 text-center font-mono uppercase tracking-wider">
+                AI System v2.0 // Powered by Portfolio Logic
               </p>
             </div>
           </motion.div>

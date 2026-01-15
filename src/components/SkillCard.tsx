@@ -9,48 +9,45 @@ interface SkillCardProps {
   level: number;
   icon: LucideIcon;
   description: string;
+  index?: number;
 }
 
-export default function SkillCard({ title, level, icon: Icon, description }: SkillCardProps) {
+export default function SkillCard({ title, level, icon: Icon, description, index = 0 }: SkillCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -5 }}
-      className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/30 p-1 shadow-lg hover:shadow-xl transition-all"
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -5, borderColor: 'rgba(99, 102, 241, 0.5)' }}
+      className="bg-gray-950 rounded-none border border-white/10 p-6 hover:shadow-2xl transition-all group"
     >
-      <div className="bg-transparent border-0">
-        <div className="p-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600">
-              <Icon className="h-6 w-6 text-white" />
-            </div>
-            <h3 className="text-xl font-bold">{title}</h3>
+      <div className="flex flex-col h-full justify-between">
+        <div>
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-xl font-bold font-mono tracking-tight text-gray-100 group-hover:text-indigo-400 transition-colors">
+              {title}
+            </h3>
+            <Icon className="h-6 w-6 text-gray-500 group-hover:text-indigo-400 transition-colors" />
           </div>
+          <p className="text-gray-500 text-sm leading-relaxed mb-6 font-light">
+            {description}
+          </p>
         </div>
-        <div className="p-4 pt-0">
-          <div className="space-y-3">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="w-full bg-gray-700 rounded-full h-2.5">
-                    <motion.div 
-                      className="bg-gradient-to-r from-cyan-500 to-blue-600 h-2.5 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${level}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: 0.2 }}
-                    />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{level}% proficiency</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <p className="text-gray-400 text-sm">{description}</p>
+
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs font-mono uppercase text-gray-500">
+            <span>Proficiency</span>
+            <span>{level}%</span>
+          </div>
+          <div className="w-full bg-gray-900 h-1">
+            <motion.div
+              className="bg-indigo-500 h-1"
+              initial={{ width: 0 }}
+              whileInView={{ width: `${level}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+            />
           </div>
         </div>
       </div>

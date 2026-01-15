@@ -1,17 +1,12 @@
 'use client';
 
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 export default function RootLayout({
@@ -30,7 +25,7 @@ export default function RootLayout({
         <title>Samuel Oliveira - Portfolio</title>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-gray-900 text-gray-100 antialiased`}>
+      <body className={`${inter.variable} bg-gray-900 text-gray-100 antialiased`}>
         <LanguageProvider>
           {children}
         </LanguageProvider>

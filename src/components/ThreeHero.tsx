@@ -1,110 +1,77 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { Suspense, useRef, useMemo } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
+import * as THREE from 'three';
 
-export default function ThreeHero() {
-  const [mounted, setMounted] = useState(false);
-  const [error, setError] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+function ParticleWave() {
+  const count = 5000;
+  const positions = useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 15; // x
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 2; // y (flatter)
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 15; // z
+    }
+    return positions;
+  }, [count]);
 
-  useEffect(() => {
-    setMounted(true);
-    
-    // Dynamically load Three.js components only on client side
-    const loadThreeComponents = async () => {
-      try {
-        if (typeof window !== 'undefined') {
-          // Only load Three.js components on the client side
-          const { Canvas, useFrame } = await import('@react-three/fiber');
-          const { OrbitControls, Sphere, MeshDistortMaterial, Float } = await import('@react-three/drei');
-          const THREE = await import('three');
-          
-          // Create the 3D scene dynamically
-          if (containerRef.current) {
-            // Clear any existing content
-            containerRef.current.innerHTML = '';
-            
-            // Create a simple canvas element as fallback
-            const canvas = document.createElement('canvas');
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.background = 'linear-gradient(to bottom, #111827, #1f2937, #111827)';
-            containerRef.current.appendChild(canvas);
-            
-            // Add a simple animation to the canvas
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-              canvas.width = canvas.clientWidth;
-              canvas.height = canvas.clientHeight;
-              
-              let time = 0;
-              const animate = () => {
-                if (!ctx) return;
-                
-                time += 0.02;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Draw a simple animated circle
-                const x = canvas.width / 2 + Math.cos(time) * 50;
-                const y = canvas.height / 2 + Math.sin(time) * 50;
-                const radius = 50 + Math.sin(time * 2) * 10;
-                
-                const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                gradient.addColorStop(0, '#22d3ee');
-                gradient.addColorStop(1, '#3b82f6');
-                
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                requestAnimationFrame(animate);
-              };
-              
-              // Handle window resize
-              const handleResize = () => {
-                canvas.width = canvas.clientWidth;
-                canvas.height = canvas.clientHeight;
-              };
-              
-              window.addEventListener('resize', handleResize);
-              animate();
-              
-              // Cleanup
-              return () => {
-                window.removeEventListener('resize', handleResize);
-              };
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load 3D components:', err);
-        setError(true);
-      }
-    };
-    
-    loadThreeComponents();
-  }, []);
+  const pointsRef = useRef<THREE.Points>(null);
 
-  if (!mounted) {
-    return (
-      <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="text-cyan-400">Loading 3D content...</div>
-      </div>
-    );
-  }
+  useFrame((state) => {
+    if (!pointsRef.current) return;
 
-  if (error) {
-    return (
-      <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-       
-      </div>
-    );
-  }
+    // Animate wave
+    const time = state.clock.getElapsedTime();
+    const positions = pointsRef.current.geometry.attributes.position.array as Float32Array;
+
+    for (let i = 0; i < count; i++) {
+      const x = positions[i * 3];
+      const z = positions[i * 3 + 2];
+
+      // Calculate wave height based on position and time
+      // Multiple sine waves for complexity
+      const y =
+        Math.sin(x * 0.5 + time) * 0.5 +
+        Math.sin(z * 0.3 + time * 0.5) * 0.5 +
+        Math.sin((x + z) * 0.2 + time) * 0.2;
+
+      positions[i * 3 + 1] = y;
+    }
+
+    pointsRef.current.geometry.attributes.position.needsUpdate = true;
+
+    // Slow rotation
+    pointsRef.current.rotation.y = time * 0.05;
+  });
 
   return (
-    <div ref={containerRef} className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* 3D content will be dynamically loaded here */}
+    <Points ref={pointsRef} positions={positions} stride={3} frustumCulled={false}>
+      <PointMaterial
+        transparent
+        color="#818cf8"
+        size={0.03}
+        sizeAttenuation={true}
+        depthWrite={false}
+        opacity={0.8}
+      />
+    </Points>
+  );
+}
+
+export default function ThreeHero() {
+  return (
+    <div className="w-full h-full absolute inset-0 z-0 bg-black">
+      <Canvas camera={{ position: [0, 2, 6], fov: 60 }}>
+        <Suspense fallback={null}>
+          <fog attach="fog" args={['#000000', 5, 15]} />
+          <ambientLight intensity={0.5} />
+
+          <ParticleWave />
+
+        </Suspense>
+      </Canvas>
     </div>
   );
 }
