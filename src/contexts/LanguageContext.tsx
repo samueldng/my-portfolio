@@ -25,6 +25,7 @@ const translations = {
     'hero.subtitle': 'Desenvolvedor Full-Stack especializado em criar experiências digitais excepcionais com Node.js, React e tecnologias modernas',
     'hero.viewProjects': 'Ver Projetos',
     'hero.contactMe': 'Entrar em Contato',
+    'hero.downloadCV': 'Baixar Currículo',
 
     // Skills Section
     'skills.title': 'HABILIDADES',
@@ -74,6 +75,7 @@ const translations = {
     'hero.subtitle': 'Full-Stack Developer specialized in creating exceptional digital experiences with Node.js, React, and modern technologies',
     'hero.viewProjects': 'View Projects',
     'hero.contactMe': 'Contact Me',
+    'hero.downloadCV': 'Download CV',
 
     // Skills Section
     'skills.title': 'SKILLS',

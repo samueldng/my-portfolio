@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot } from "lucide-react";
+import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot, Download } from "lucide-react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import SkillCard from "@/components/SkillCard";
@@ -353,6 +353,18 @@ const Page = () => {
               >
                 {t('hero.contactMe')}
               </motion.a>
+
+              <motion.a
+                href="/Samuel_OLIVEIRA.pdf"
+                download="Samuel_OLIVEIRA.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, x: 10 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-transparent border border-cyan-500/30 text-cyan-400 font-medium rounded-none hover:bg-cyan-500/10 backdrop-blur-sm transition-colors cursor-pointer flex items-center gap-2"
+              >
+                {t('hero.downloadCV')} <Download className="w-5 h-5" />
+              </motion.a>
             </motion.div>
           </motion.div>
         </div>
@@ -369,10 +381,10 @@ const Page = () => {
             <div className="w-[1px] h-12 bg-gradient-to-b from-gray-500 to-transparent"></div>
           </div>
         </motion.div>
-      </section>
+      </section >
 
       {/* Skills Section */}
-      <motion.section
+      < motion.section
         id="skills"
         ref={skillsRef}
         className="py-32 relative border-t border-white/5"
@@ -434,10 +446,10 @@ const Page = () => {
             </div>
           </motion.div>
         </div>
-      </motion.section>
+      </motion.section >
 
       {/* Projects Section */}
-      <motion.section
+      < motion.section
         id="projetos"
         ref={projectsRef}
         className="py-32 relative border-t border-white/5"
@@ -488,10 +500,10 @@ const Page = () => {
             />
           </div>
         </div>
-      </motion.section>
+      </motion.section >
 
       {/* Chatbot Section */}
-      <motion.section
+      < motion.section
         id="chatbot"
         className="py-24 relative border-t border-white/5"
         initial={{ opacity: 0 }}
@@ -566,10 +578,10 @@ const Page = () => {
             </div>
           </motion.div>
         </div>
-      </motion.section>
+      </motion.section >
 
       {/* Contact Section */}
-      <motion.section
+      < motion.section
         id="contato"
         ref={contactRef}
         className="py-32 relative border-t border-white/5"
@@ -668,36 +680,38 @@ const Page = () => {
             </motion.div>
           </div>
         </div>
-      </motion.section>
+      </motion.section >
 
       {/* Footer */}
-      <footer className="py-8 text-center text-gray-500 text-sm border-t border-gray-800/50">
+      < footer className="py-8 text-center text-gray-500 text-sm border-t border-gray-800/50" >
         <div className="max-w-7xl mx-auto px-6">
           <p>{t('footer.copyright').replace('{year}', new Date().getFullYear().toString())}</p>
         </div>
-      </footer>
+      </footer >
 
       {/* Scroll to top button */}
       <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            onClick={scrollToTop}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-lg z-50"
-          >
-            <ArrowUp />
-          </motion.button>
-        )}
-      </AnimatePresence>
+        {
+          showScrollTop && (
+            <motion.button
+              onClick={scrollToTop}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-lg z-50"
+            >
+              <ArrowUp />
+            </motion.button>
+          )
+        }
+      </AnimatePresence >
 
       {/* AI Chat Modal */}
-      <AIChatModal isOpen={isChatModalOpen} onClose={() => setIsChatModalOpen(false)} />
+      < AIChatModal isOpen={isChatModalOpen} onClose={() => setIsChatModalOpen(false)} />
 
-    </div>
+    </div >
   );
 };
 
