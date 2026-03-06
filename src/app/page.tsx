@@ -9,6 +9,10 @@ import SkillCard from "@/components/SkillCard";
 import ProjectCard from "@/components/ProjectCard";
 import AIChatModal from "@/components/AIChatModal";
 import { useLanguage } from '@/contexts/LanguageContext';
+import { FlipText } from "@/components/ui/flip-text";
+import AnimatedButton from "@/components/ui/animated-button";
+import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { ScrollTiltText } from "@/components/ui/scroll-tilt-text";
 
 import dynamic from 'next/dynamic';
 
@@ -217,25 +221,20 @@ const Page = () => {
             SAMUEL<span className="text-indigo-500">.</span>DEV
           </motion.div>
 
-          <div className="hidden md:flex space-x-12">
-            {[
-              { label: 'Home', key: 'home' },
-              { label: 'Skills', key: 'skills' },
-              { label: 'Projetos', key: 'projetos' },
-              { label: 'Contato', key: 'contato' }
-            ].map((item) => (
-              <motion.a
-                key={item.key}
-                href={`#${item.key}`}
-                whileHover={{ y: -2 }}
-                className={`transition-all duration-300 text-sm font-mono tracking-widest uppercase cursor-pointer ${activeSection === item.key
-                  ? 'text-white border-b-2 border-indigo-500 pb-1'
-                  : 'text-gray-500 hover:text-white'
-                  }`}
-              >
-                {t(`nav.${item.key === 'projetos' ? 'projects' : item.key === 'contato' ? 'contact' : item.key}`)}
-              </motion.a>
-            ))}
+          <div className="hidden md:flex">
+            <AnimatedTabs
+              tabs={[
+                { label: t('nav.home'), value: 'home' },
+                { label: t('nav.skills') || 'Skills', value: 'skills' },
+                { label: t('nav.projects'), value: 'projetos' },
+                { label: t('nav.contact'), value: 'contato' },
+              ]}
+              activeTab={activeSection}
+              onTabClick={(value) => {
+                const el = document.getElementById(value);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+            />
           </div>
 
           <div className="flex items-center space-x-3">
@@ -312,8 +311,14 @@ const Page = () => {
               visible: { y: 0, opacity: 1 }
             }}>
               <h1 className="text-6xl md:text-9xl font-black mb-6 tracking-tighter leading-[0.9]">
-                <span className="block text-white">SAMUEL</span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-700">OLIVEIRA.</span>
+                <span className="block text-white">
+                  <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-white" duration={3} delay={0.5}>
+                    SAMUEL
+                  </FlipText>
+                </span>
+                <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-700" duration={3} delay={0.8}>
+                  OLIVEIRA.
+                </FlipText>
               </h1>
             </motion.div>
 
@@ -336,35 +341,32 @@ const Page = () => {
               }}
               className="flex flex-wrap gap-6"
             >
-              <motion.a
+              <AnimatedButton
+                as="a"
                 href="#projetos"
-                whileHover={{ scale: 1.05, x: 10 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white text-black font-bold rounded-none hover:bg-cyan-400 transition-colors cursor-pointer flex items-center gap-2"
+                className="px-8 py-4 bg-white text-black font-bold rounded-none hover:bg-cyan-400 transition-colors cursor-pointer flex items-center gap-2 border-white/20"
               >
                 {t('hero.viewProjects')} <ArrowUp className="rotate-45 w-5 h-5" />
-              </motion.a>
+              </AnimatedButton>
 
-              <motion.a
+              <AnimatedButton
+                as="a"
                 href="#contato"
-                whileHover={{ scale: 1.05, x: 10 }}
-                whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-transparent border border-white/20 text-white font-medium rounded-none hover:bg-white/10 backdrop-blur-sm transition-colors cursor-pointer"
               >
                 {t('hero.contactMe')}
-              </motion.a>
+              </AnimatedButton>
 
-              <motion.a
+              <AnimatedButton
+                as="a"
                 href="/Samuel_OLIVEIRA.pdf"
                 download="Samuel_OLIVEIRA.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.05, x: 10 }}
-                whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-transparent border border-cyan-500/30 text-cyan-400 font-medium rounded-none hover:bg-cyan-500/10 backdrop-blur-sm transition-colors cursor-pointer flex items-center gap-2"
               >
                 {t('hero.downloadCV')} <Download className="w-5 h-5" />
-              </motion.a>
+              </AnimatedButton>
             </motion.div>
           </motion.div>
         </div>
@@ -393,20 +395,22 @@ const Page = () => {
         viewport={{ once: true }}
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-20 text-left"
-          >
-            <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
-              {t('skills.title')}<span className="text-indigo-500">.</span>
-            </h2>
-            <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
-              {t('skills.subtitle')}
-            </p>
-          </motion.div>
+          <ScrollTiltText startRotation={-12} startX={-80} offsetEnd={0.5}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-20 text-left"
+            >
+              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
+                {t('skills.title')}<span className="text-indigo-500">.</span>
+              </h2>
+              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
+                {t('skills.subtitle')}
+              </p>
+            </motion.div>
+          </ScrollTiltText>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {skills.map((skill, index) => (
