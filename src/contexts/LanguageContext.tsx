@@ -44,6 +44,7 @@ const translations = {
     'project.nell.description': 'Aplicação completa de gestão e controle de estoque com dashboard em tempo real',
     'project.sis.description': 'Sistema completo de gestão e conferência de frotas veiculares com geolocalização',
     'project.squid.description': 'Jogo interativo baseado na famosa série Round 6 com mecânicas envolventes',
+    'projects.technologies': 'Tecnologias',
 
     // Chat Section
     'chat.title': 'ASSISTENTE IA',
@@ -94,6 +95,7 @@ const translations = {
     'project.nell.description': 'Complete inventory management and control application with real-time dashboard',
     'project.sis.description': 'Complete vehicle fleet management and inspection system with geolocation',
     'project.squid.description': 'Interactive game based on the famous Round 6 series with engaging mechanics',
+    'projects.technologies': 'Technologies',
 
     // Chat Section
     'chat.title': 'AI ASSISTANT',

@@ -13,6 +13,7 @@ import { FlipText } from "@/components/ui/flip-text";
 import AnimatedButton from "@/components/ui/animated-button";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import { ScrollTiltText } from "@/components/ui/scroll-tilt-text";
+import { TechMarquee } from "@/components/ui/tech-marquee";
 
 import dynamic from 'next/dynamic';
 
@@ -425,7 +426,7 @@ const Page = () => {
             ))}
           </div>
 
-          {/* Tech stack */}
+          {/* Tech stack - Marquee */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -434,20 +435,7 @@ const Page = () => {
             className="mt-20"
           >
             <h3 className="text-xl font-bold mb-8 text-gray-200 font-mono uppercase tracking-widest">{t('skills.techStack')}</h3>
-            <div className="flex flex-wrap gap-3">
-              {['React', 'Node.js', 'TypeScript', 'Next.js', 'Tailwind CSS', 'MongoDB', 'PostgreSQL', 'Docker'].map((tech) => (
-                <motion.div
-                  key={tech}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  whileHover={{ y: -3, borderColor: '#6366f1' }}
-                  viewport={{ once: true }}
-                  className="px-6 py-3 bg-gray-900 border border-white/5 text-gray-400 font-mono text-sm hover:text-white transition-colors cursor-default"
-                >
-                  {tech}
-                </motion.div>
-              ))}
-            </div>
+            <TechMarquee />
           </motion.div>
         </div>
       </motion.section >
@@ -462,20 +450,22 @@ const Page = () => {
         viewport={{ once: true }}
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-20 text-left"
-          >
-            <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
-              {t('projects.title')}<span className="text-indigo-500">.</span>
-            </h2>
-            <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
-              {t('projects.subtitle')}
-            </p>
-          </motion.div>
+          <ScrollTiltText startRotation={-10} startX={-60} offsetEnd={0.5}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-20 text-left"
+            >
+              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
+                {t('projects.title')}<span className="text-indigo-500">.</span>
+              </h2>
+              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
+                {t('projects.subtitle')}
+              </p>
+            </motion.div>
+          </ScrollTiltText>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <ProjectCard
@@ -485,6 +475,7 @@ const Page = () => {
               imageUrl="/images/projeto1.png"
               githubUrl="https://github.com/samueldng/nell-app"
               index={0}
+              techLabel={t('projects.technologies')}
             />
             <ProjectCard
               title="SIS Frota"
@@ -493,6 +484,7 @@ const Page = () => {
               imageUrl="/images/projeto2.png"
               githubUrl="https://github.com/samueldng/Rvehicle-photo-app"
               index={1}
+              techLabel={t('projects.technologies')}
             />
             <ProjectCard
               title="Squid Game"
@@ -501,6 +493,7 @@ const Page = () => {
               imageUrl="/images/projeto3.png"
               githubUrl="https://github.com/samueldng/round6"
               index={2}
+              techLabel={t('projects.technologies')}
             />
           </div>
         </div>
@@ -515,19 +508,21 @@ const Page = () => {
         viewport={{ once: true }}
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="mb-12 text-left"
-          >
-            <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight text-white">
-              {t('chat.title')}<span className="text-indigo-500">.</span>
-            </h2>
-            <p className="text-gray-400 max-w-xl text-lg font-light">
-              {t('chat.subtitle')}
-            </p>
-          </motion.div>
+          <ScrollTiltText startRotation={-8} startX={-50} offsetEnd={0.5}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="mb-12 text-left"
+            >
+              <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight text-white">
+                {t('chat.title')}<span className="text-indigo-500">.</span>
+              </h2>
+              <p className="text-gray-400 max-w-xl text-lg font-light">
+                {t('chat.subtitle')}
+              </p>
+            </motion.div>
+          </ScrollTiltText>
 
           {/* ... existing chatbot integration container, but darkened ... */}
           <motion.div
@@ -594,19 +589,21 @@ const Page = () => {
         viewport={{ once: true }}
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="mb-20 text-left"
-          >
-            <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
-              {t('contact.title')}<span className="text-indigo-500">.</span>
-            </h2>
-            <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
-              {t('contact.subtitle')}
-            </p>
-          </motion.div>
+          <ScrollTiltText startRotation={-10} startX={-60} offsetEnd={0.5}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="mb-20 text-left"
+            >
+              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
+                {t('contact.title')}<span className="text-indigo-500">.</span>
+              </h2>
+              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
+                {t('contact.subtitle')}
+              </p>
+            </motion.div>
+          </ScrollTiltText>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <motion.div

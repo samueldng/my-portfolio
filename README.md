@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio - Edição Editorial Tech
 
-## Getting Started
+Um portfólio pessoal moderno e altamente imersivo construído com Next.js 14, desenhado sob medida com uma estética "Futuristic Minimalism" e "Editorial Tech".
 
-First, run the development server:
+**URL ao Vivo:** [https://my-portfolio-neon-nine-84.vercel.app](https://my-portfolio-neon-nine-84.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Stack Tecnológico
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Este projeto utiliza as tecnologias web mais recentes para entregar uma experiência focada em performance e visualmente impressionante.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Framework Principal
+- **[Next.js 14](https://nextjs.org/)** (App Router): Framework React para renderização do lado servidor (SSR), roteamento e otimização.
+- **[React 18](https://react.dev/)**: Biblioteca para construção de interfaces de usuário.
+- **[TypeScript](https://www.typescriptlang.org/)**: Superset tipado de JavaScript para melhor qualidade de código e experiência de desenvolvimento.
+- **[React Native](https://reactnative.dev/)**: Framework para desenvolvimento de aplicativos móveis multiplataforma.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Estilização & Design System
+- **[Tailwind CSS](https://tailwindcss.com/)**: Framework CSS utilitário para desenvolvimento rápido de UI.
+- **[Lucide React](https://lucide.dev/)**: Conjunto de ícones bonito e consistente.
+- **[Geist Font](https://vercel.com/font)**: Tipografia moderna, geométrica sans-serif.
 
-## Learn More
+### Animação & Gráficos 3D
+- **[Framer Motion](https://www.framer.com/motion/)**: Biblioteca de animação pronta para produção para React (transições suaves, animações de scroll, parallax).
+- **[GSAP](https://gsap.com/)**: Plataforma de animação profissional para efeitos avançados (parallax, bounce, timeline).
+- **[Three.js](https://threejs.org/)**: Biblioteca JavaScript 3D.
+- **[React Three Fiber](https://docs.pmnd.rs/react-three-fiber)**: Renderizador React para Three.js.
+- **[Drei](https://github.com/pmndrs/drei)**: Ajudantes úteis para React Three Fiber (Stars, Sparkles, OrbitControls).
 
-To learn more about Next.js, take a look at the following resources:
+### Banco de Dados & Backend
+- **[MongoDB](https://www.mongodb.com/)**: Banco de dados NoSQL para armazenamento flexível de dados.
+- **[PostgreSQL](https://www.postgresql.org/)**: Banco de dados relacional robusto e escalável.
+- **[MySQL](https://www.mysql.com/)**: Sistema de gerenciamento de banco de dados relacional.
+- **[Firebase](https://firebase.google.com/)**: Plataforma de desenvolvimento com autenticação, banco de dados em tempo real e hosting.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Bibliotecas & Ferramentas
+- **[Radix UI](https://www.radix-ui.com/)**: Componentes primitivos acessíveis e sem estilo para React.
+- **[tsParticles](https://particles.js.org/)**: Biblioteca para efeitos de partículas interativas.
+- **[Paper Design Shaders](https://github.com/paper-design/shaders)**: Shaders WebGL reativos para efeitos visuais (Liquid Metal).
+- **[clsx](https://github.com/lukeed/clsx)** & **[tailwind-merge](https://github.com/dcastil/tailwind-merge)**: Utilitários para composição de classes CSS.
+- **[Docker](https://www.docker.com/)**: Plataforma de containerização para ambientes padronizados.
+- **[Vercel Analytics](https://vercel.com/analytics)**: Análise de desempenho e métricas de uso.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Funcionalidades
+- **Tema Editorial Dark**: Um fundo profundo `gray-950` com acentos suaves em **Indigo (#6366f1)**.
+- **Seção Hero 3D**: Simulação interativa de ondas de partículas usando Three.js shaders.
+- **Suporte Bilíngue (PT/EN)**: Localização baseada em Context API para troca de idioma instantânea.
+- **Modal de Chatbot IA**: Interface simulada de assistente IA para interações sobre "Sobre Mim".
+- **Design Responsivo**: Abordagem Mobile-first garantindo exibição perfeita em todos os dispositivos.
+- **Animações de Scroll Dinâmicas**: Efeitos de tilt, parallax e stagger ao rolar a página (inspirado em VengenceUI).
+- **Marquee de Tecnologias**: Carrossel infinito de tecnologias categorizadas com pausa ao hover (inspirado em Aceternity UI).
+- **FAB de Tecnologias**: Botão flutuante nos cards de projeto que revela as tecnologias com animação spring (inspirado em Motion.dev).
+- **Títulos Interativos**: Efeito ScrollTiltText em todos os títulos de seção para acompanhamento dinâmico do scroll.
 
-## Deploy on Vercel
+## Como Iniciar
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1.  **Clone o repositório**:
+    ```bash
+    git clone https://github.com/samueldng/my-portfolio.git
+    cd my-portfolio
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2.  **Instale as dependências**:
+    ```bash
+    npm install
+    ```
+
+3.  **Rode o servidor de desenvolvimento**:
+    ```bash
+    npm run dev
+    ```
+    Abra [http://localhost:3000](http://localhost:3000) para ver no navegador.
+
+## Deploy
+
+Este projeto é otimizado para deploy na **[Vercel](https://vercel.com/)**.
+Certifique-se de que seu projeto na Vercel está conectado à branch `master` deste repositório.
+
+---
+© 2026 Samuel Oliveira. Todos os direitos reservados.

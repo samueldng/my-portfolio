@@ -18,6 +18,8 @@ const config: Config = {
         float: 'float 6s ease-in-out infinite',
         pulse: 'pulse 2s infinite',
         'fade-in': 'fadeIn 0.8s ease-out',
+        marquee: 'marquee 35s linear infinite',
+        'marquee-reverse': 'marquee-reverse 35s linear infinite',
       },
       keyframes: {
         float: {
@@ -47,6 +49,14 @@ const config: Config = {
             opacity: '1',
             transform: 'translateY(0)',
           },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-33.333%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-33.333%)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
     },

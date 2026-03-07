@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, Github, Layers } from 'lucide-react';
 import Image from 'next/image';
 
 interface ProjectCardProps {
@@ -12,6 +13,7 @@ interface ProjectCardProps {
   githubUrl?: string;
   liveUrl?: string;
   index?: number;
+  techLabel?: string;
 }
 
 export default function ProjectCard({
@@ -21,16 +23,19 @@ export default function ProjectCard({
   imageUrl,
   githubUrl,
   liveUrl,
-  index = 0
+  index = 0,
+  techLabel = 'Tecnologias',
 }: ProjectCardProps) {
+  const [showTech, setShowTech] = useState(false);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -5, borderColor: 'rgba(99, 102, 241, 0.5)' }}
-      className="bg-gray-950 border border-white/10 overflow-hidden group hover:shadow-2xl transition-all"
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ y: -8, borderColor: 'rgba(99, 102, 241, 0.5)' }}
+      className="bg-gray-950 border border-white/10 overflow-hidden group hover:shadow-2xl hover:shadow-indigo-500/5 transition-all"
     >
       <div className="relative h-56 overflow-hidden bg-gray-900 border-b border-white/5">
         <Image
@@ -65,15 +70,59 @@ export default function ProjectCard({
           {description}
         </p>
 
-        <div className="flex flex-wrap gap-2 mt-auto">
-          {technologies.map((tech, index) => (
-            <span
-              key={index}
-              className="px-2 py-1 bg-gray-900 border border-white/10 text-gray-400 text-[10px] uppercase tracking-wider font-mono"
-            >
-              {tech}
-            </span>
-          ))}
+        {/* FAB Tecnologias */}
+        <div className="relative">
+          <motion.button
+            onClick={() => setShowTech(!showTech)}
+            onMouseEnter={() => setShowTech(true)}
+            onMouseLeave={() => setShowTech(false)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-white/10 text-gray-400 
+                       hover:text-indigo-400 hover:border-indigo-500/40 transition-all font-mono text-xs 
+                       uppercase tracking-wider cursor-pointer relative z-20"
+          >
+            <Layers className="w-3.5 h-3.5" />
+            {techLabel}
+          </motion.button>
+
+          <AnimatePresence>
+            {showTech && (
+              <motion.div
+                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                onMouseEnter={() => setShowTech(true)}
+                onMouseLeave={() => setShowTech(false)}
+                className="absolute bottom-full left-0 mb-2 z-30 min-w-[200px]"
+              >
+                <div className="bg-gray-900/95 backdrop-blur-md border border-white/10 p-3 shadow-2xl shadow-black/40">
+                  <div className="flex flex-wrap gap-2">
+                    {technologies.map((tech, i) => (
+                      <motion.span
+                        key={tech}
+                        initial={{ opacity: 0, scale: 0.6, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.6, y: 10 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 400,
+                          damping: 20,
+                          delay: i * 0.06,
+                        }}
+                        className="px-3 py-1.5 bg-gray-800/80 border border-indigo-500/20 text-indigo-300 
+                                   text-[11px] uppercase tracking-wider font-mono whitespace-nowrap
+                                   hover:bg-indigo-500/20 hover:border-indigo-500/40 transition-colors"
+                      >
+                        {tech}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>
