@@ -13,6 +13,7 @@ import {
 import { ExternalLink, Github, Layers } from "lucide-react";
 import Image from "next/image";
 import { ScrollTiltText } from "@/components/ui/scroll-tilt-text";
+import ScrollPinSection from "@/components/ScrollPinSection";
 
 interface Project {
     title: string;
@@ -83,6 +84,40 @@ export default function ProjectsShowcase3D({
     const velocityRotation = useTransform(smoothVelocity, [-1000, 0, 1000], [-30, 0, 30]);
     const velocityZ = useTransform(smoothVelocity, [-1000, 0, 1000], [-200, 0, -200]);
 
+    if (isMobile) {
+        return (
+            <div className="bg-gray-950 w-full">
+                <ScrollPinSection itemCount={projects.length + 1}>
+                    {/* Slide 1: Title */}
+                    <div className="w-full h-full flex flex-col justify-center px-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-left w-full max-w-sm mx-auto pt-10"
+                        >
+                            <h2 className="text-5xl font-black mb-4 tracking-tighter text-white">
+                                {title}<span className="text-indigo-500">.</span>
+                            </h2>
+                            <p className="text-gray-400 text-lg font-light border-l-2 border-indigo-500/50 pl-4">
+                                {subtitle}
+                            </p>
+                        </motion.div>
+                    </div>
+
+                    {/* Slides 2+: Projects */}
+                    {projects.map((project, i) => (
+                        <div key={`mobile-proj-${i}`} className="w-full h-full flex flex-col justify-center items-center px-6">
+                            <div className="w-full max-w-sm">
+                                <MobileProjectCard project={project} techLabel={techLabel} />
+                            </div>
+                        </div>
+                    ))}
+                </ScrollPinSection>
+            </div>
+        );
+    }
+
     return (
         <section ref={containerRef} style={{ height: "400vh" }} className="relative bg-gray-950">
             <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center perspective-[1200px]">
@@ -111,20 +146,14 @@ export default function ProjectsShowcase3D({
                     className="flex items-center gap-6 md:gap-8 px-6 md:px-24 preserve-3d mt-20"
                 >
                     {projects.map((project, i) => (
-                        isMobile ? (
-                            <div key={i} className="shrink-0" style={{ width: cardWidth }}>
-                                <MobileProjectCard project={project} techLabel={techLabel} />
-                            </div>
-                        ) : (
-                            <ProjectCard3D
-                                key={i}
-                                project={project}
-                                index={i}
-                                velocityRotation={velocityRotation}
-                                velocityZ={velocityZ}
-                                techLabel={techLabel}
-                            />
-                        )
+                        <ProjectCard3D
+                            key={i}
+                            project={project}
+                            index={i}
+                            velocityRotation={velocityRotation}
+                            velocityZ={velocityZ}
+                            techLabel={techLabel}
+                        />
                     ))}
                 </motion.div>
 
