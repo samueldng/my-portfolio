@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot, Download } from "lucide-react";
+import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot, Download, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import SkillCard from "@/components/SkillCard";
@@ -14,6 +14,10 @@ import AnimatedButton from "@/components/ui/animated-button";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import { ScrollTiltText } from "@/components/ui/scroll-tilt-text";
 import { TechMarquee } from "@/components/ui/tech-marquee";
+import { GlassDock } from "@/components/ui/glass-dock";
+import ScrollZoomHero from "@/components/ScrollZoomHero";
+import ScrollPinSection from "@/components/ScrollPinSection";
+import ProjectsShowcase3D from "@/components/ProjectsShowcase3D";
 
 import dynamic from 'next/dynamic';
 
@@ -28,6 +32,7 @@ const Page = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showChatbot, setShowChatbot] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
@@ -160,6 +165,55 @@ const Page = () => {
     { name: "mobile", icon: Smartphone, level: 85 },
   ];
 
+  // Real Projects Data
+  const realProjects = [
+    {
+      title: "MaintQR",
+      description: "Plataforma de gestão de ativos e serviços de manutenção baseada em QR Codes. Centraliza histórico, gera OS transparentes e possui portal do cliente em tempo real.",
+      technologies: ["React", "Node.js", "Supabase", "Tailwind"],
+      imageUrl: "/images/maintqr.png",
+      githubUrl: "https://github.com/samueldng/Service_App",
+      liveUrl: "https://frostserviceapp.vercel.app/"
+    },
+    {
+      title: "LogicSales",
+      description: "App híbrido para força de vendas. Facilita o processo comercial de ponta a ponta com interface imersiva desenvolvida com foco em UX.",
+      technologies: ["React Native", "Expo", "PostgreSQL", "Zustand"],
+      imageUrl: "/images/logicsales.png",
+      liveUrl: "https://www.figma.com/design/OCEnCituKthn1SViXZpgWP/LogicSales"
+    },
+    {
+      title: "Catálogo Morais",
+      description: "Catálogo online exclusivo para Morais Distribuidora, integrado ao WhatsApp para orçamentos automáticos rápidos e de alta conversão.",
+      technologies: ["Next.js", "Tailwind CSS", "Prisma", "Vercel"],
+      imageUrl: "/images/logicsales-web.png",
+      githubUrl: "https://github.com/samueldng/logicsales-web",
+      liveUrl: "https://moraisdistribuidora.vercel.app/"
+    },
+    {
+      title: "Hemolab Showcase",
+      description: "Landing page para a imersão sobre Inteligência Artificial onde atuei como palestrante, focada em gestão estratégica com IA para líderes do Hemolab.",
+      technologies: ["React", "Next.js", "Framer Motion", "Three.js"],
+      imageUrl: "/images/hemolab.png",
+      githubUrl: "https://github.com/samueldng/hemolab-showcase",
+      liveUrl: "https://hemolab-showcase.vercel.app/"
+    },
+    {
+      title: "UBS Inventário",
+      description: "Sistema completo de inventário para a SEMUS (Secretaria Municipal de Saúde) de Bacabal, para controle de todos os equipamentos e suporte nas unidades de saúde.",
+      technologies: ["React", "TypeScript", "Vite", "Node.js"],
+      imageUrl: "/images/ubs-inventario.png",
+      liveUrl: "https://gestortibacabal.netlify.app/"
+    },
+    {
+      title: "NativeShop",
+      description: "Aplicativo de commerce completo focado em pequenos e médios negócios, possibilitando transição digital acessível.",
+      technologies: ["React Native", "Firebase", "Redux"],
+      imageUrl: "/images/projeto2.png", // Using existing placeholder since no image was provided
+      githubUrl: "https://github.com/samueldng/NativeShop"
+    }
+  ];
+
   // Initialize chatbot
   useEffect(() => {
     if (showChatbot) {
@@ -196,7 +250,7 @@ const Page = () => {
   }, [showChatbot]);
 
   return (
-    <div ref={containerRef} className="bg-gray-950 text-gray-100 overflow-x-hidden font-sans selection:bg-indigo-500/30">
+    <div ref={containerRef} className="bg-gray-950 text-gray-100 [overflow-x:clip] font-sans selection:bg-indigo-500/30">
       {/* Custom Cursor */}
 
 
@@ -263,241 +317,250 @@ const Page = () => {
                 {language === 'pt' ? 'EN' : 'PT'}
               </span>
             </motion.button>
+            {/* Mobile Menu Toggle Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 bg-gray-900 border border-white/10 text-white hover:bg-gray-800 transition-all cursor-pointer"
+              aria-label="Toggle Navigation"
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </motion.button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Hero Section with 3D Background */}
-      <section
-        id="home"
-        className="min-h-screen flex flex-col justify-center relative overflow-hidden"
-      >
-        {/* 3D Background */}
-        <div className="absolute inset-0 z-0 opacity-80">
-          <ThreeHero />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 z-10 relative pointer-events-none w-full h-full flex items-center md:items-end pb-20">
-          {/* Main Content Container - Asymmetric/Bottom-Left */}
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.1,
-                  delayChildren: 0.3
-                }
-              }
-            }}
-            className="text-left pointer-events-auto max-w-4xl"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
+            className="fixed inset-0 z-30 bg-gray-950/95 backdrop-blur-xl pt-24 px-6 md:hidden flex flex-col"
           >
-            {/* Small Tagline */}
+            <div className="flex flex-col gap-2 mt-10">
+              {[
+                { label: t('nav.home'), value: 'home' },
+                { label: t('nav.skills') || 'Skills', value: 'skills' },
+                { label: t('nav.projects'), value: 'projetos' },
+                { label: t('nav.contact'), value: 'contato' },
+              ].map((item, index) => (
+                <motion.button
+                  key={item.value}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setTimeout(() => {
+                      document.getElementById(item.value)?.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                  }}
+                  className="text-left py-6 text-3xl font-black tracking-tighter border-b border-white/10 text-gray-400 hover:text-white transition-colors"
+                >
+                  {item.label}
+                  <span className="text-indigo-500">.</span>
+                </motion.button>
+              ))}
+            </div>
+
             <motion.div
-              variants={{
-                hidden: { x: -20, opacity: 0 },
-                visible: { x: 0, opacity: 1 }
-              }}
-              className="flex items-center gap-4 mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-auto pb-12 flex justify-center"
             >
-              <div className="h-[2px] w-12 bg-cyan-400"></div>
-              <span className="text-cyan-400 font-mono tracking-widest text-sm uppercase">Full Stack Developer</span>
-            </motion.div>
-
-            {/* Title - Massive Typography */}
-            <motion.div variants={{
-              hidden: { y: 50, opacity: 0 },
-              visible: { y: 0, opacity: 1 }
-            }}>
-              <h1 className="text-6xl md:text-9xl font-black mb-6 tracking-tighter leading-[0.9]">
-                <span className="block text-white">
-                  <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-white" duration={3} delay={0.5}>
-                    SAMUEL
-                  </FlipText>
-                </span>
-                <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-700" duration={3} delay={0.8}>
-                  OLIVEIRA.
-                </FlipText>
-              </h1>
-            </motion.div>
-
-            {/* Subtitle/Description */}
-            <motion.p
-              variants={{
-                hidden: { y: 20, opacity: 0 },
-                visible: { y: 0, opacity: 1 }
-              }}
-              className="text-xl md:text-2xl text-gray-400 max-w-2xl mb-10 font-light leading-relaxed border-l-2 border-gray-800 pl-6"
-            >
-              {t('hero.subtitle')}
-            </motion.p>
-
-            {/* Buttons - Left Aligned */}
-            <motion.div
-              variants={{
-                hidden: { y: 20, opacity: 0 },
-                visible: { y: 0, opacity: 1 }
-              }}
-              className="flex flex-wrap gap-6"
-            >
-              <AnimatedButton
-                as="a"
-                href="#projetos"
-                className="px-8 py-4 bg-white text-black font-bold rounded-none hover:bg-cyan-400 transition-colors cursor-pointer flex items-center gap-2 border-white/20"
-              >
-                {t('hero.viewProjects')} <ArrowUp className="rotate-45 w-5 h-5" />
-              </AnimatedButton>
-
-              <AnimatedButton
-                as="a"
-                href="#contato"
-                className="px-8 py-4 bg-transparent border border-white/20 text-white font-medium rounded-none hover:bg-white/10 backdrop-blur-sm transition-colors cursor-pointer"
-              >
-                {t('hero.contactMe')}
-              </AnimatedButton>
-
-              <AnimatedButton
-                as="a"
-                href="/Samuel_OLIVEIRA.pdf"
-                download="Samuel_OLIVEIRA.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-4 bg-transparent border border-cyan-500/30 text-cyan-400 font-medium rounded-none hover:bg-cyan-500/10 backdrop-blur-sm transition-colors cursor-pointer flex items-center gap-2"
-              >
-                {t('hero.downloadCV')} <Download className="w-5 h-5" />
-              </AnimatedButton>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-hover"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 10, 0] }}
-          transition={{ delay: 2, duration: 2, repeat: Infinity }}
-        >
-          <div className="flex flex-col items-center gap-2 text-gray-500 text-sm">
-            <span>Scroll</span>
-            <div className="w-[1px] h-12 bg-gradient-to-b from-gray-500 to-transparent"></div>
-          </div>
-        </motion.div>
-      </section >
-
-      {/* Skills Section */}
-      < motion.section
-        id="skills"
-        ref={skillsRef}
-        className="py-32 relative border-t border-white/5"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <ScrollTiltText startRotation={-12} startX={-80} offsetEnd={0.5}>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="mb-20 text-left"
-            >
-              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
-                {t('skills.title')}<span className="text-indigo-500">.</span>
-              </h2>
-              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
-                {t('skills.subtitle')}
-              </p>
-            </motion.div>
-          </ScrollTiltText>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {skills.map((skill, index) => (
-              <SkillCard
-                key={skill.name}
-                title={t(`skills.${skill.name.toLowerCase()}`)}
-                level={skill.level}
-                icon={skill.icon}
-                description={t(`skills.${skill.name.toLowerCase()}.desc`)}
-                index={index}
+              <GlassDock
+                items={[
+                  { title: 'Email', icon: Mail, onClick: () => window.location.href = 'mailto:samuel-dng@outlook.com' },
+                  { title: 'WhatsApp', icon: Phone, onClick: () => window.open('https://wa.me/5599985143916', '_blank') },
+                  { title: 'GitHub', icon: Github, href: 'https://github.com/samueldng' }
+                ]}
+                dockClassName="scale-90"
               />
-            ))}
-          </div>
-
-          {/* Tech stack - Marquee */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-20"
-          >
-            <h3 className="text-xl font-bold mb-8 text-gray-200 font-mono uppercase tracking-widest">{t('skills.techStack')}</h3>
-            <TechMarquee />
-          </motion.div>
-        </div>
-      </motion.section >
-
-      {/* Projects Section */}
-      < motion.section
-        id="projetos"
-        ref={projectsRef}
-        className="py-32 relative border-t border-white/5"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <ScrollTiltText startRotation={-10} startX={-60} offsetEnd={0.5}>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="mb-20 text-left"
-            >
-              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
-                {t('projects.title')}<span className="text-indigo-500">.</span>
-              </h2>
-              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
-                {t('projects.subtitle')}
-              </p>
             </motion.div>
-          </ScrollTiltText>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ProjectCard
-              title="Nell App"
-              description={t('project.nell.description')}
-              technologies={['React', 'Node.js', 'MongoDB']}
-              imageUrl="/images/projeto1.png"
-              githubUrl="https://github.com/samueldng/nell-app"
-              index={0}
-              techLabel={t('projects.technologies')}
-            />
-            <ProjectCard
-              title="SIS Frota"
-              description={t('project.sis.description')}
-              technologies={['React Native', 'Node.js', 'PostgreSQL']}
-              imageUrl="/images/projeto2.png"
-              githubUrl="https://github.com/samueldng/Rvehicle-photo-app"
-              index={1}
-              techLabel={t('projects.technologies')}
-            />
-            <ProjectCard
-              title="Squid Game"
-              description={t('project.squid.description')}
-              technologies={['JavaScript', 'TypeScript', 'CSS']}
-              imageUrl="/images/projeto3.png"
-              githubUrl="https://github.com/samueldng/round6"
-              index={2}
-              techLabel={t('projects.technologies')}
-            />
+      {/* Hero Section with Scroll Zoom Background */}
+      <section id="home">
+        <ScrollZoomHero>
+          <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
+            <ThreeHero />
           </div>
-        </div>
-      </motion.section >
+
+          <div className="max-w-7xl mx-auto px-6 z-10 relative w-full h-full flex items-center md:items-end pb-36 pt-32">
+            {/* Main Content Container - Asymmetric/Bottom-Left */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 0.3
+                  }
+                }
+              }}
+              className="text-left w-full pointer-events-auto max-w-4xl"
+            >
+              {/* Small Tagline */}
+              <motion.div
+                variants={{
+                  hidden: { x: -20, opacity: 0 },
+                  visible: { x: 0, opacity: 1 }
+                }}
+                className="flex items-center gap-4 mb-6"
+              >
+                <div className="h-[2px] w-12 bg-cyan-400"></div>
+                <span className="text-cyan-400 font-mono tracking-widest text-sm uppercase">Full Stack Developer</span>
+              </motion.div>
+
+              {/* Title - Massive Typography */}
+              <motion.div variants={{
+                hidden: { y: 50, opacity: 0 },
+                visible: { y: 0, opacity: 1 }
+              }}>
+                <h1 className="text-6xl md:text-9xl font-black mb-6 tracking-tighter leading-[0.9]">
+                  <span className="block text-white">
+                    <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-white" duration={3} delay={0.5}>
+                      SAMUEL
+                    </FlipText>
+                  </span>
+                  <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-700" duration={3} delay={0.8}>
+                    OLIVEIRA.
+                  </FlipText>
+                </h1>
+              </motion.div>
+
+              {/* Subtitle/Description */}
+              <motion.p
+                variants={{
+                  hidden: { y: 20, opacity: 0 },
+                  visible: { y: 0, opacity: 1 }
+                }}
+                className="text-xl md:text-2xl text-gray-400 max-w-2xl mb-10 font-light leading-relaxed border-l-2 border-gray-800 pl-6"
+              >
+                {t('hero.subtitle')}
+              </motion.p>
+
+              {/* Buttons - Left Aligned */}
+              <motion.div
+                variants={{
+                  hidden: { y: 20, opacity: 0 },
+                  visible: { y: 0, opacity: 1 }
+                }}
+                className="flex flex-wrap gap-6"
+              >
+                <AnimatedButton
+                  as="a"
+                  href="#projetos"
+                  className="px-8 py-4 bg-white text-black font-bold rounded-none hover:bg-cyan-400 transition-colors cursor-pointer flex items-center gap-2 border-white/20"
+                >
+                  {t('hero.viewProjects')} <ArrowUp className="rotate-45 w-5 h-5" />
+                </AnimatedButton>
+
+                <AnimatedButton
+                  as="a"
+                  href="#contato"
+                  className="px-8 py-4 bg-transparent border border-white/20 text-white font-medium rounded-none hover:bg-white/10 backdrop-blur-sm transition-colors cursor-pointer"
+                >
+                  {t('hero.contactMe')}
+                </AnimatedButton>
+
+                <AnimatedButton
+                  as="a"
+                  href="/Samuel_OLIVEIRA.pdf"
+                  download="Samuel_OLIVEIRA.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-transparent border border-cyan-500/30 text-cyan-400 font-medium rounded-none hover:bg-cyan-500/10 backdrop-blur-sm transition-colors cursor-pointer flex items-center gap-2"
+                >
+                  {t('hero.downloadCV')} <Download className="w-5 h-5" />
+                </AnimatedButton>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-hover pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, 10, 0] }}
+              transition={{ delay: 2, duration: 2, repeat: Infinity }}
+            >
+              <div className="flex flex-col items-center gap-2 text-gray-500 text-sm">
+                <span>Scroll</span>
+                <div className="w-[1px] h-12 bg-gradient-to-b from-gray-500 to-transparent"></div>
+              </div>
+            </motion.div>
+          </div>
+        </ScrollZoomHero>
+      </section>
+
+      {/* Skills Section with Scroll Pinning */}
+      <div id="skills" ref={skillsRef}>
+        <ScrollPinSection itemCount={3}>
+          {/* Slide 1: Title & Overview (shown first, then fades up) */}
+          <div className="w-full h-full flex flex-col justify-center px-10 md:px-24">
+            <ScrollTiltText startRotation={-12} startX={-80} offsetEnd={0.5}>
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="mb-8 text-left"
+              >
+                <h2 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter text-white">
+                  {t('skills.title')}<span className="text-indigo-500">.</span>
+                </h2>
+                <p className="text-gray-400 max-w-2xl text-2xl font-light border-l-4 border-indigo-500 pl-6 py-2">
+                  {t('skills.subtitle')}
+                </p>
+              </motion.div>
+            </ScrollTiltText>
+          </div>
+
+          {/* Slide 2: Core Skills Cards (fades in after title) */}
+          <div className="w-full max-w-6xl px-10 md:px-24">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+              {skills.map((skill, index) => (
+                <SkillCard
+                  key={skill.name}
+                  title={t(`skills.${skill.name.toLowerCase()}`)}
+                  level={skill.level}
+                  icon={skill.icon}
+                  description={t(`skills.${skill.name.toLowerCase()}.desc`)}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Slide 3: Tech Marquee (fades in after cards) */}
+          <div className="w-full max-w-7xl px-10 md:px-24">
+            <h3 className="text-3xl font-black mb-12 text-gray-200 font-mono tracking-widest border-b border-indigo-500/30 pb-4 inline-block">
+              {t('skills.techStack')}
+            </h3>
+            <TechMarquee />
+          </div>
+        </ScrollPinSection>
+      </div>
+
+      {/* Projects Section with 3D Velocity Carousel */}
+      <div id="projetos" ref={projectsRef}>
+        <ProjectsShowcase3D
+          projects={realProjects}
+          title={t('projects.title')}
+          subtitle={t('projects.subtitle')}
+          techLabel={t('projects.technologies') || 'Tecnologias'}
+        />
+      </div>
 
       {/* Chatbot Section */}
       < motion.section
@@ -605,12 +668,21 @@ const Page = () => {
             </motion.div>
           </ScrollTiltText>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+            }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-12"
+          >
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              variants={{
+                hidden: { opacity: 0, x: -50, scale: 0.9 },
+                visible: { opacity: 1, x: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } }
+              }}
             >
               <h3 className="text-2xl font-bold mb-8 text-gray-200">{t('contact.workTogether')}</h3>
 
@@ -638,10 +710,10 @@ const Page = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={{
+                hidden: { opacity: 0, x: 50, scale: 0.9 },
+                visible: { opacity: 1, x: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } }
+              }}
               className="flex flex-col gap-8"
             >
               <div className="relative w-32 h-32 bg-gray-900 border-2 border-indigo-500/30 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 mx-auto shadow-2xl shadow-indigo-500/20">
@@ -653,33 +725,18 @@ const Page = () => {
                 />
               </div>
 
-              <div className="flex gap-6 items-start">
-                <motion.a
-                  href="https://github.com/samueldng"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className="flex-1 p-8 bg-gray-950 border border-white/10 hover:border-indigo-500 transition-all group text-center"
-                >
-                  <Github className="text-4xl text-gray-500 group-hover:text-white mx-auto mb-4 transition-colors" />
-                  <h3 className="text-lg font-bold text-white mb-2">GITHUB</h3>
-                  <p className="text-gray-500 text-sm font-mono">@samueldng</p>
-                </motion.a>
-
-                <motion.a
-                  href="https://www.linkedin.com/in/samuel-oliveira-26bb7014a/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className="flex-1 p-8 bg-gray-950 border border-white/10 hover:border-indigo-500 transition-all group text-center"
-                >
-                  <Linkedin className="text-4xl text-gray-500 group-hover:text-white mx-auto mb-4 transition-colors" />
-                  <h3 className="text-lg font-bold text-white mb-2">LINKEDIN</h3>
-                  <p className="text-gray-500 text-sm font-mono">Samuel Oliveira</p>
-                </motion.a>
+              <div className="flex justify-center mt-6">
+                <GlassDock
+                  items={[
+                    { title: 'Email', icon: Mail, onClick: () => window.location.href = 'mailto:samuel-dng@outlook.com' },
+                    { title: 'WhatsApp', icon: Phone, onClick: () => window.open('https://wa.me/5599985143916', '_blank') },
+                    { title: 'GitHub', icon: Github, href: 'https://github.com/samueldng' },
+                    { title: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/samuel-oliveira-26bb7014a/' }
+                  ]}
+                />
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </motion.section >
 

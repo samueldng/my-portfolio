@@ -124,11 +124,11 @@ export function TechMarquee() {
             {/* Category legend */}
             <div className="flex flex-wrap gap-4 mt-6 justify-center md:justify-start">
                 {[
-                    { label: 'Languages', color: 'bg-cyan-400' },
+                    { label: 'Linguagens', color: 'bg-cyan-400' },
                     { label: 'Frameworks', color: 'bg-indigo-400' },
-                    { label: 'Databases', color: 'bg-emerald-400' },
-                    { label: 'Libraries', color: 'bg-purple-400' },
-                    { label: 'Tools', color: 'bg-amber-400' },
+                    { label: 'Banco de Dados', color: 'bg-emerald-400' },
+                    { label: 'Bibliotecas', color: 'bg-purple-400' },
+                    { label: 'Ferramentas', color: 'bg-amber-400' },
                 ].map((cat) => (
                     <div key={cat.label} className="flex items-center gap-2 text-gray-500 text-xs font-mono uppercase tracking-wider">
                         <div className={cn('w-2 h-2 rounded-full', cat.color)} />

@@ -3,6 +3,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import LoadingOverlay from '@/components/LoadingOverlay';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,6 +28,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} bg-gray-900 text-gray-100 antialiased`}>
         <LanguageProvider>
+          <LoadingOverlay />
           {children}
         </LanguageProvider>
       </body>

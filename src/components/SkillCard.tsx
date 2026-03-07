@@ -30,12 +30,12 @@ export default function SkillCard({ title, level, icon: Icon, description, index
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 50, scale: 0.9, rotate: index % 2 === 0 ? -2 : 2 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -5, borderColor: 'rgba(99, 102, 241, 0.5)' }}
-      className="relative rounded-none overflow-hidden group"
+      transition={{ duration: 0.7, delay: index * 0.15, type: 'spring', stiffness: 100 }}
+      whileHover={{ y: -10, scale: 1.02, transition: { duration: 0.2 } }}
+      className={`relative rounded-none overflow-hidden group ${index === 1 ? 'md:mt-12' : index === 2 ? 'md:mt-24' : ''}`}
       style={{ padding: 2 }}
     >
       {/* Liquid Metal Border */}
@@ -66,7 +66,7 @@ export default function SkillCard({ title, level, icon: Icon, description, index
 
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-mono uppercase text-gray-500">
-              <span>Proficiency</span>
+              <span>Proficiência</span>
               <span>{level}%</span>
             </div>
             <div className="w-full bg-gray-900 h-1">
