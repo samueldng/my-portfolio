@@ -2,7 +2,7 @@
 
 Um portfólio pessoal moderno e altamente imersivo construído com Next.js 14, desenhado sob medida com uma estética "Futuristic Minimalism" e "Editorial Tech".
 
-**URL ao Vivo:** [https://my-portfolio-neon-nine-84.vercel.app](https://my-portfolio-neon-nine-84.vercel.app)
+**URL ao Vivo:** [https://my-portfolio-neon-nine-84.vercel.app](https://logistack.online)
 
 ## Stack Tecnológico
 
