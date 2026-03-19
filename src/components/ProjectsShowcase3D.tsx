@@ -122,7 +122,7 @@ export default function ProjectsShowcase3D({
         <section ref={containerRef} style={{ height: "400vh" }} className="relative bg-gray-950">
             <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center perspective-[1200px]">
                 {/* Title area */}
-                <div className="absolute top-20 left-6 md:left-24 z-10 w-full pr-6">
+                <div className="absolute top-8 left-6 md:left-12 lg:left-24 z-10 w-full pr-6 pointer-events-none">
                     <ScrollTiltText startRotation={-10} startX={-60} offsetEnd={0.5}>
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
@@ -130,7 +130,7 @@ export default function ProjectsShowcase3D({
                             viewport={{ once: true }}
                             className="mb-10 text-left"
                         >
-                            <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter text-white">
+                            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tighter text-white">
                                 {title}<span className="text-indigo-500">.</span>
                             </h2>
                             <p className="text-gray-400 max-w-xl text-lg md:text-xl font-light border-l-2 border-indigo-500/50 pl-4 md:pl-6">
@@ -143,7 +143,7 @@ export default function ProjectsShowcase3D({
                 {/* 3D Carousel container */}
                 <motion.div
                     style={{ x }}
-                    className="flex items-center gap-6 md:gap-8 px-6 md:px-24 preserve-3d mt-20"
+                    className="flex items-center gap-6 md:gap-8 px-6 md:px-24 preserve-3d mt-48"
                 >
                     {projects.map((project, i) => (
                         <ProjectCard3D
