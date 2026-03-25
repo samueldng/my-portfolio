@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { Github, Linkedin, Mail, Phone, ArrowUp, Code, Server, Smartphone, Languages, Bot, Download, Menu, X } from "lucide-react";
 import Image from "next/image";
-import { gsap } from "gsap";
 import SkillCard from "@/components/SkillCard";
 import ProjectCard from "@/components/ProjectCard";
 import AIChatModal from "@/components/AIChatModal";
@@ -19,13 +18,7 @@ import ScrollZoomHero from "@/components/ScrollZoomHero";
 import ScrollPinSection from "@/components/ScrollPinSection";
 import ProjectsShowcase3D from "@/components/ProjectsShowcase3D";
 
-import dynamic from 'next/dynamic';
-
-// Dynamically import ThreeHero to avoid SSR issues
-const ThreeHero = dynamic(() => import('@/components/ThreeHero').then(mod => mod.default), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900"></div>
-});
+// ThreeHero component removed as requested for performance optimization
 
 const Page = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -34,121 +27,45 @@ const Page = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const heroRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const skillsRef = useRef<HTMLDivElement>(null);
+
   const { scrollYProgress } = useScroll();
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const { language, toggleLanguage, t } = useLanguage();
 
-  // Parallax refs
-  const heroRef = useRef(null);
-  const projectsRef = useRef(null);
-  const contactRef = useRef(null);
-  const skillsRef = useRef(null);
-
-  // Parallax elements
-  const parallaxRef1 = useRef(null);
-  const parallaxRef2 = useRef(null);
-  const parallaxRef3 = useRef(null);
-
-  useEffect(() => {
-    // GSAP animations
-    if (heroRef.current) {
-      gsap.from(heroRef.current, {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        delay: 0.2
-      });
+  // Optimized Scroll Tracking using Framer Motion
+  useMotionValueEvent(scrollYProgress, "change", () => {
+    const scrollPosition = window.scrollY;
+    // Set scroll top visibility efficiently
+    if (scrollPosition > 300 && !showScrollTop) {
+      setShowScrollTop(true);
+    } else if (scrollPosition <= 300 && showScrollTop) {
+      setShowScrollTop(false);
     }
+  });
 
-    // Falling animation for profile photo
-    const animateProfilePhoto = () => {
-      const profilePhoto = document.getElementById('profile-photo');
-      const notificationDot = profilePhoto?.querySelector('div.absolute div');
-
-      if (profilePhoto) {
-        // Set initial position above the screen and hidden
-        gsap.set(profilePhoto, {
-          y: -200,
-          opacity: 0,
-          scale: 0.8
-        });
-
-        // Animate falling with bounce effect and scale up
-        gsap.to(profilePhoto, {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.5,
-          ease: "bounce.out",
-          delay: 0.5
-        });
-      }
-
-      // Animate the notification dot
-      if (notificationDot) {
-        gsap.to(notificationDot, {
-          scale: 1.2,
-          repeat: -1,
-          yoyo: true,
-          duration: 1,
-          ease: "power1.inOut",
-          delay: 2 // Start after the photo has landed
-        });
-      }
-    };
-
-    // Try to animate immediately, and also after a small delay to ensure DOM is ready
-    animateProfilePhoto();
-    setTimeout(animateProfilePhoto, 100);
-
-    // Parallax effect on scroll
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-
-      if (parallaxRef1.current) {
-        (parallaxRef1.current as HTMLElement).style.transform = `translateY(${scrollPosition * 0.5}px)`;
-      }
-
-      if (parallaxRef2.current) {
-        (parallaxRef2.current as HTMLElement).style.transform = `translateY(${scrollPosition * 0.3}px)`;
-      }
-
-      if (parallaxRef3.current) {
-        (parallaxRef3.current as HTMLElement).style.transform = `translateY(${scrollPosition * 0.7}px)`;
-      }
-
-      // Scroll to top button
-      setShowScrollTop(scrollPosition > 300);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // Handle scroll events for active section
+  // Intersection Observer for Active Section
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'skills', 'projetos', 'chatbot', 'contato'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const height = element.offsetHeight;
-
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
-            setActiveSection(section);
-            break;
-          }
+    const sections = ['home', 'skills', 'projetos', 'chatbot', 'contato'];
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+           setActiveSection(entry.target.id);
         }
-      }
-    };
+      });
+    }, { threshold: 0.3 }); // Trigger when 30% of the section is visible
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollToTop = () => {
@@ -250,7 +167,7 @@ const Page = () => {
   }, [showChatbot]);
 
   return (
-    <div ref={containerRef} className="bg-gray-950 text-gray-100 [overflow-x:clip] font-sans selection:bg-indigo-500/30">
+    <div ref={containerRef} className="bg-gray-950 text-gray-100 [overflow-x:clip] font-sans selection:bg-green-500/30">
       {/* Custom Cursor */}
 
 
@@ -258,38 +175,36 @@ const Page = () => {
 
       {/* Progress bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-600 z-50 origin-left"
         style={{ scaleX: pathLength }}
       />
-
-      {/* Navigation */}
-      <motion.nav
+      <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed top-0 w-full z-40 bg-gray-950/90 border-b border-white/5 py-4 px-6 backdrop-blur-md"
+        className="fixed top-0 w-full z-40 bg-[#020A05]/90 border-b border-white/5 py-4 px-6 backdrop-blur-md"
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <motion.div
             className="text-xl font-black tracking-tighter text-white cursor-pointer"
           >
-            SAMUEL<span className="text-indigo-500">.</span>DEV
+            SAMUEL<span className="text-[#00FF66]">.</span>DEV
           </motion.div>
 
-          <div className="hidden md:flex">
-            <AnimatedTabs
-              tabs={[
-                { label: t('nav.home'), value: 'home' },
-                { label: t('nav.skills') || 'Skills', value: 'skills' },
-                { label: t('nav.projects'), value: 'projetos' },
-                { label: t('nav.contact'), value: 'contato' },
-              ]}
-              activeTab={activeSection}
-              onTabClick={(value) => {
-                const el = document.getElementById(value);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-            />
+          <div className="hidden md:flex items-center space-x-2 bg-white/5 rounded-full px-2 py-2 border border-white/10">
+              {['home', 'skills', 'projetos', 'contato'].map((tab) => {
+                  const labels: Record<string, string> = { home: 'HOME', skills: 'HABILIDADES', projetos: 'PROJETOS', contato: 'CONTATO' };
+                  const isActive = activeSection === tab;
+                  return (
+                    <button 
+                      key={tab}
+                      onClick={() => document.getElementById(tab)?.scrollIntoView({ behavior: 'smooth' })}
+                      className={`px-6 py-2 text-sm font-bold tracking-wider transition-colors ${isActive ? 'bg-[#064E3B] text-white rounded-full' : 'text-[#A1A1AA] hover:text-white'}`}
+                    >
+                        {labels[tab]}
+                    </button>
+                  );
+              })}
           </div>
 
           <div className="flex items-center space-x-3">
@@ -298,7 +213,7 @@ const Page = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsChatModalOpen(true)}
-              className="p-2 bg-gray-900 border border-white/10 text-white hover:bg-gray-800 transition-all cursor-pointer"
+              className="p-2 bg-transparent border border-white/10 text-white hover:bg-white/5 transition-all rounded-md cursor-pointer"
               aria-label="Open AI Chat"
             >
               <Bot className="h-5 w-5" />
@@ -309,7 +224,7 @@ const Page = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleLanguage}
-              className="px-3 py-1 bg-gray-900 border border-white/10 text-white hover:bg-gray-800 transition-all flex items-center cursor-pointer gap-2"
+              className="px-3 py-2 bg-transparent border border-white/10 text-white hover:bg-white/5 transition-all rounded-md flex items-center cursor-pointer gap-2"
               aria-label="Toggle language"
             >
               <Languages className="h-4 w-4" />
@@ -322,7 +237,7 @@ const Page = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 bg-gray-900 border border-white/10 text-white hover:bg-gray-800 transition-all cursor-pointer"
+              className="md:hidden p-2 bg-transparent border border-white/10 text-white hover:bg-white/5 transition-all rounded-md cursor-pointer"
               aria-label="Toggle Navigation"
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -338,7 +253,7 @@ const Page = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
-            className="fixed inset-0 z-30 bg-gray-950/95 backdrop-blur-xl pt-24 px-6 md:hidden flex flex-col"
+            className="fixed inset-0 z-40 bg-[#020A05]/95 backdrop-blur-xl pt-24 px-6 md:hidden flex flex-col"
           >
             <div className="flex flex-col gap-2 mt-10">
               {[
@@ -358,10 +273,10 @@ const Page = () => {
                       document.getElementById(item.value)?.scrollIntoView({ behavior: 'smooth' });
                     }, 300);
                   }}
-                  className="text-left py-6 text-3xl font-black tracking-tighter border-b border-white/10 text-gray-400 hover:text-white transition-colors"
+                  className="text-left py-6 text-3xl font-black tracking-tighter border-b border-white/10 text-gray-400 hover:text-white transition-colors uppercase"
                 >
                   {item.label}
-                  <span className="text-indigo-500">.</span>
+                  <span className="text-[#00FF66]">.</span>
                 </motion.button>
               ))}
             </div>
@@ -385,122 +300,135 @@ const Page = () => {
         )}
       </AnimatePresence>
 
-      {/* Hero Section with Scroll Zoom Background */}
-      <section id="home">
-        <ScrollZoomHero>
-          <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
-            <ThreeHero />
-          </div>
+      {/* Hero Section */}
+      <section id="home" className="relative w-full h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-[#020A05]">
+        {/* Foundation: Background & Particles (Z-0) */}
+        <div className="absolute inset-0 z-0">
+          {/* Main Background Image - Adjusted Zoom & Blur */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center md:bg-[center_top_-4rem] bg-no-repeat blur-[2px]"
+            style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+          ></div>
+          <div className="absolute inset-0 bg-[#00FF66]/15 mix-blend-multiply pointer-events-none"></div>
+          {/* Dark Overlay for readability - Adjusted Opacity */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020A05]/80 via-[#0A1F10]/40 to-[#020A05]/95 pointer-events-none"></div>
+        </div>
 
-          <div className="max-w-7xl mx-auto px-6 z-10 relative w-full h-full flex items-center md:items-end pb-36 pt-32">
-            {/* Main Content Container - Asymmetric/Bottom-Left */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 0.3
-                  }
-                }
-              }}
-              className="text-left w-full pointer-events-auto max-w-4xl"
-            >
-              {/* Small Tagline */}
-              <motion.div
-                variants={{
-                  hidden: { x: -20, opacity: 0 },
-                  visible: { x: 0, opacity: 1 }
-                }}
-                className="flex items-center gap-4 mb-6"
-              >
-                <div className="h-[2px] w-12 bg-cyan-400"></div>
-                <span className="text-cyan-400 font-mono tracking-widest text-sm uppercase">Full Stack Developer</span>
-              </motion.div>
+        {/* Z-10 Giant Typography - Adjusted Opacity & Blend Mode */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none select-none">
+          <h1 className="text-[16vw] font-black leading-[0.8] tracking-tighter text-[#00FF66] opacity-[0.25] text-center mt-20 md:mt-10">
+            SAMUEL<br/>OLIVEIRA
+          </h1>
+        </div>
 
-              {/* Title - Massive Typography */}
-              <motion.div variants={{
-                hidden: { y: 50, opacity: 0 },
-                visible: { y: 0, opacity: 1 }
-              }}>
-                <h1 className="text-6xl md:text-9xl font-black mb-6 tracking-tighter leading-[0.9]">
-                  <span className="block text-white">
-                    <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-white" duration={3} delay={0.5}>
-                      SAMUEL
-                    </FlipText>
-                  </span>
-                  <FlipText className="text-6xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-700" duration={3} delay={0.8}>
-                    OLIVEIRA.
-                  </FlipText>
-                </h1>
-              </motion.div>
-
-              {/* Subtitle/Description */}
-              <motion.p
-                variants={{
-                  hidden: { y: 20, opacity: 0 },
-                  visible: { y: 0, opacity: 1 }
-                }}
-                className="text-xl md:text-2xl text-gray-400 max-w-2xl mb-10 font-light leading-relaxed border-l-2 border-gray-800 pl-6"
-              >
-                {t('hero.subtitle')}
-              </motion.p>
-
-              {/* Buttons - Left Aligned */}
-              <motion.div
-                variants={{
-                  hidden: { y: 20, opacity: 0 },
-                  visible: { y: 0, opacity: 1 }
-                }}
-                className="flex flex-wrap gap-6"
-              >
-                <AnimatedButton
-                  as="a"
-                  href="#projetos"
-                  className="px-8 py-4 bg-white text-black font-bold rounded-none hover:bg-cyan-400 transition-colors cursor-pointer flex items-center gap-2 border-white/20"
-                >
-                  {t('hero.viewProjects')} <ArrowUp className="rotate-45 w-5 h-5" />
-                </AnimatedButton>
-
-                <AnimatedButton
-                  as="a"
-                  href="#contato"
-                  className="px-8 py-4 bg-transparent border border-white/20 text-white font-medium rounded-none hover:bg-white/10 backdrop-blur-sm transition-colors cursor-pointer"
-                >
-                  {t('hero.contactMe')}
-                </AnimatedButton>
-
-                <AnimatedButton
-                  as="a"
-                  href="/Samuel_OLIVEIRA.pdf"
-                  download="Samuel_OLIVEIRA.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-8 py-4 bg-transparent border border-cyan-500/30 text-cyan-400 font-medium rounded-none hover:bg-cyan-500/10 backdrop-blur-sm transition-colors cursor-pointer flex items-center gap-2"
-                >
-                  {t('hero.downloadCV')} <Download className="w-5 h-5" />
-                </AnimatedButton>
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-hover pointer-events-none">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, y: [0, 10, 0] }}
-              transition={{ delay: 2, duration: 2, repeat: Infinity }}
-            >
-              <div className="flex flex-col items-center gap-2 text-gray-500 text-sm">
-                <span>Scroll</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-gray-500 to-transparent"></div>
+        {/* Z-20 Content - Redesigned Asymmetric Centered Architecture */}
+        <div className="relative z-20 w-full h-full max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center md:justify-start pt-28 md:pt-0 pointer-events-none">
+           
+           {/* Left Col: Info and CTA */}
+           <motion.div 
+             initial={{ opacity: 0, x: -50 }} 
+             animate={{ opacity: 1, x: 0 }} 
+             transition={{ duration: 0.8, delay: 0.2 }}
+             className="flex flex-col gap-6 items-center md:items-start text-center md:text-left z-30 pointer-events-auto max-w-[580px] md:mt-0"
+           >
+              <div className="flex items-center justify-center md:justify-start gap-4">
+                 <div className="hidden md:block w-12 h-[2px] bg-[#00FF66] shadow-[0_0_10px_rgba(0,255,102,0.8)]"></div>
+                 <span className="text-[#00FF66] font-mono tracking-[0.2em] font-medium text-xs md:text-sm drop-shadow-[0_0_8px_rgba(0,255,102,0.8)]">FULL STACK DEVELOPER</span>
               </div>
-            </motion.div>
-          </div>
-        </ScrollZoomHero>
+
+              <p className="text-[#E4E4E7] text-base md:text-[1.1rem] font-light leading-relaxed border-none md:border-l-2 md:border-white/10 md:pl-5 py-1 text-center md:text-left w-full mx-auto md:mx-0 drop-shadow-md">
+                 {t('hero.subtitle')}
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-4 relative z-40 w-full">
+                  <AnimatedButton
+                    as="a"
+                    href="#projetos"
+                    className="w-full sm:w-auto px-8 py-3 bg-[#020A05]/90 backdrop-blur-md border border-[#00FF66]/50 text-white rounded font-medium tracking-wider text-xs md:text-sm hover:bg-[#00FF66]/10 hover:border-[#00FF66] transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                  >
+                    {t('hero.viewProjects')} <ArrowUp className="rotate-45 w-4 h-4 text-[#00FF66] transition-all" />
+                  </AnimatedButton>
+
+                  <AnimatedButton
+                    as="a"
+                    href="#contato"
+                    className="hidden sm:flex w-full sm:w-auto px-8 py-3 bg-[#020A05]/90 backdrop-blur-md border border-white/10 text-white rounded font-medium tracking-wider text-xs md:text-sm hover:bg-white/5 hover:border-white/30 transition-all cursor-pointer items-center justify-center gap-2"
+                  >
+                    {t('hero.contactMe')}
+                  </AnimatedButton>
+                  
+                  <AnimatedButton
+                    as="a"
+                    href="/Samuel_OLIVEIRA.pdf"
+                    download="Samuel_OLIVEIRA.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-8 py-3 bg-[#020A05]/90 backdrop-blur-md border border-white/10 text-white rounded font-medium tracking-wider text-xs md:text-sm hover:bg-white/5 hover:border-white/30 transition-all cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    CV <Download className="w-4 h-4 text-[#A1A1AA]" />
+                  </AnimatedButton>
+              </div>
+           </motion.div>
+
+           {/* Centered Photo and Neon Ring */}
+           <div className="md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 flex items-center justify-center w-full md:w-auto z-20 mt-12 md:mt-0 pointer-events-none">
+             <motion.div 
+               initial={{ opacity: 0, scale: 0.8 }} 
+               animate={{ opacity: 1, scale: 1 }} 
+               transition={{ duration: 1, delay: 0.4 }}
+               className="relative w-72 h-72 md:w-[480px] md:h-[480px] flex items-center justify-center"
+             >
+                 
+                 {/* The Ring */}
+                 <motion.div 
+                   animate={{ rotate: 360 }} 
+                   transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                   className="absolute inset-0 rounded-full border-[3px] border-[#00FF66]/50 shadow-[0_0_40px_rgba(0,255,102,0.6)] z-10 pointer-events-none"
+                 >
+                    {/* Orbiting Icons */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#020A05] p-2 md:p-3 rounded-full border border-[#00FF66]/80 text-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.8)]">
+                      <Github className="w-4 h-4 md:w-5 md:h-5" />
+                    </div>
+                    
+                    <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-[#020A05] p-2 md:p-3 rounded-full border border-[#00FF66]/80 text-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.8)]">
+                      <Code className="w-4 h-4 md:w-5 md:h-5" />
+                    </div>
+
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-[#020A05] p-2 md:p-3 rounded-full border border-[#00FF66]/80 text-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.8)]">
+                      <Server className="w-4 h-4 md:w-5 md:h-5" />
+                    </div>
+
+                    <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 bg-[#020A05] p-2 md:p-3 rounded-full border border-[#00FF66]/80 text-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.8)]">
+                      <Smartphone className="w-4 h-4 md:w-5 md:h-5" />
+                    </div>
+                 </motion.div>
+
+                 {/* Photo */}
+                 <div className="relative w-[85%] h-[85%] rounded-full overflow-hidden border-[6px] border-transparent z-20 bg-[#020A05] pointer-events-auto">
+                   <Image 
+                      src="/me.png" 
+                      fill 
+                      className="object-cover object-[center_top] scale-[1.05]" 
+                      alt="Samuel Developer" 
+                      priority
+                   />
+                   {/* Inset shadow ring overlay */}
+                   <div className="absolute inset-0 rounded-full shadow-[inset_0_-25px_80px_rgba(0,255,102,0.4)] pointer-events-none"></div>
+                 </div>
+
+             </motion.div>
+           </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 pointer-events-none">
+            <span className="text-[10px] text-[#A1A1AA] font-mono tracking-widest uppercase opacity-70">Scroll</span>
+            <motion.div 
+               animate={{ y: [0, 8, 0], opacity: [0.3, 0.8, 0.3] }}
+               transition={{ duration: 2, repeat: Infinity }}
+               className="w-[1px] h-8 md:h-12 bg-gradient-to-b from-[#A1A1AA] to-transparent"
+            ></motion.div>
+        </div>
       </section>
 
       {/* Skills Section with Scroll Pinning */}
@@ -517,9 +445,9 @@ const Page = () => {
                 className="mb-8 text-left"
               >
                 <h2 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter text-white">
-                  {t('skills.title')}<span className="text-indigo-500">.</span>
+                  {t('skills.title')}<span className="text-green-500">.</span>
                 </h2>
-                <p className="text-gray-400 max-w-2xl text-2xl font-light border-l-4 border-indigo-500 pl-6 py-2">
+                <p className="text-gray-400 max-w-2xl text-2xl font-light border-l-4 border-green-500 pl-6 py-2">
                   {t('skills.subtitle')}
                 </p>
               </motion.div>
@@ -544,7 +472,7 @@ const Page = () => {
 
           {/* Slide 3: Tech Marquee (fades in after cards) */}
           <div className="w-full max-w-7xl px-10 md:px-24">
-            <h3 className="text-3xl font-black mb-12 text-gray-200 font-mono tracking-widest border-b border-indigo-500/30 pb-4 inline-block">
+            <h3 className="text-3xl font-black mb-12 text-gray-200 font-mono tracking-widest border-b border-green-500/30 pb-4 inline-block">
               {t('skills.techStack')}
             </h3>
             <TechMarquee />
@@ -579,7 +507,7 @@ const Page = () => {
               className="mb-12 text-left"
             >
               <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight text-white">
-                {t('chat.title')}<span className="text-indigo-500">.</span>
+                {t('chat.title')}<span className="text-green-500">.</span>
               </h2>
               <p className="text-gray-400 max-w-xl text-lg font-light">
                 {t('chat.subtitle')}
@@ -602,7 +530,7 @@ const Page = () => {
                   </h3>
                   <button
                     onClick={() => setShowChatbot(!showChatbot)}
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-none hover:bg-indigo-700 transition-colors text-sm font-medium tracking-wide uppercase"
+                    className="px-6 py-2 bg-green-600 text-white rounded-none hover:bg-green-700 transition-colors text-sm font-medium tracking-wide uppercase"
                   >
                     {showChatbot ? t('chat.hide') : t('chat.show')}
                   </button>
@@ -610,10 +538,10 @@ const Page = () => {
 
                 {showChatbot && (
                   <div className="mt-4">
-                    <div className="bg-white/5 rounded-none p-4 border-l-2 border-indigo-500 mb-4">
+                    <div className="bg-white/5 rounded-none p-4 border-l-2 border-green-500 mb-4">
                       <div className="flex items-center space-x-2 mb-3">
-                        <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse"></div>
-                        <span className="text-xs text-indigo-300 font-mono uppercase">Online System</span>
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-green-300 font-mono uppercase">Online System</span>
                       </div>
                       <p className="text-gray-300 text-sm font-light">
                         Olá! Sou o assistente virtual do Samuel. Posso te ajudar com informações sobre seus projetos, habilidades técnicas e experiências profissionais. Como posso ajudar você hoje?
@@ -660,9 +588,9 @@ const Page = () => {
               className="mb-20 text-left"
             >
               <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
-                {t('contact.title')}<span className="text-indigo-500">.</span>
+                {t('contact.title')}<span className="text-green-500">.</span>
               </h2>
-              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-indigo-500/50 pl-6">
+              <p className="text-gray-400 max-w-xl text-xl font-light border-l-2 border-green-500/50 pl-6">
                 {t('contact.subtitle')}
               </p>
             </motion.div>
@@ -688,21 +616,21 @@ const Page = () => {
 
               <div className="space-y-8">
                 <div className="flex items-start group cursor-pointer">
-                  <div className="w-12 h-12 bg-gray-900 border border-white/10 flex items-center justify-center mr-6 group-hover:border-indigo-500 transition-colors">
+                  <div className="w-12 h-12 bg-gray-900 border border-white/10 flex items-center justify-center mr-6 group-hover:border-green-500 transition-colors">
                     <Mail className="text-gray-400 group-hover:text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg text-white mb-1 group-hover:text-indigo-400 transition-colors uppercase tracking-wider text-xs">Email</h4>
+                    <h4 className="font-bold text-lg text-white mb-1 group-hover:text-green-400 transition-colors uppercase tracking-wider text-xs">Email</h4>
                     <p className="text-gray-400 text-lg font-light">samuel-dng@outlook.com</p>
                   </div>
                 </div>
 
                 <div className="flex items-start group cursor-pointer">
-                  <div className="w-12 h-12 bg-gray-900 border border-white/10 flex items-center justify-center mr-6 group-hover:border-indigo-500 transition-colors">
+                  <div className="w-12 h-12 bg-gray-900 border border-white/10 flex items-center justify-center mr-6 group-hover:border-green-500 transition-colors">
                     <Phone className="text-gray-400 group-hover:text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg text-white mb-1 group-hover:text-indigo-400 transition-colors uppercase tracking-wider text-xs">WhatsApp</h4>
+                    <h4 className="font-bold text-lg text-white mb-1 group-hover:text-green-400 transition-colors uppercase tracking-wider text-xs">WhatsApp</h4>
                     <p className="text-gray-400 text-lg font-light">+55 (99) 98514-3916</p>
                   </div>
                 </div>
@@ -716,7 +644,7 @@ const Page = () => {
               }}
               className="flex flex-col gap-8"
             >
-              <div className="relative w-32 h-32 bg-gray-900 border-2 border-indigo-500/30 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 mx-auto shadow-2xl shadow-indigo-500/20">
+              <div className="relative w-32 h-32 bg-gray-900 border-2 border-green-500/30 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 mx-auto shadow-2xl shadow-green-500/20">
                 <Image
                   src="/me.png"
                   alt="Samuel Oliveira"
@@ -758,7 +686,7 @@ const Page = () => {
               exit={{ opacity: 0, scale: 0 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-lg z-50"
+              className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white flex items-center justify-center shadow-lg z-50"
             >
               <ArrowUp />
             </motion.button>

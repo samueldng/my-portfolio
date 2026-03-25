@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useRef, ReactNode, Children } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
@@ -80,8 +80,8 @@ export default function ScrollPinSection({ children, itemCount }: ScrollPinSecti
 
     const childrenArray = Children.toArray(children);
 
-    // Title occupies 0 → 0.2 of scroll progress
-    // Content slides share the range 0.2 → 0.95 (leave 5% breathing room at end)
+    // Title occupies 0 â†’ 0.2 of scroll progress
+    // Content slides share the range 0.2 â†’ 0.95 (leave 5% breathing room at end)
     const contentSlides = childrenArray.slice(1);
     const slideRange = contentSlides.length > 0 ? 0.75 / contentSlides.length : 0;
 
@@ -93,7 +93,7 @@ export default function ScrollPinSection({ children, itemCount }: ScrollPinSecti
             className="relative"
         >
             <div className="sticky top-0 h-screen overflow-hidden bg-gray-950">
-                {/* Title slide (first child) — starts visible, moves up and fades */}
+                {/* Title slide (first child) â€” starts visible, moves up and fades */}
                 {childrenArray[0] && (
                     <motion.div
                         style={{ y: titleY, opacity: titleOpacity, zIndex: 10 }}
@@ -103,7 +103,7 @@ export default function ScrollPinSection({ children, itemCount }: ScrollPinSecti
                     </motion.div>
                 )}
 
-                {/* Content slides — each fades in during its scroll segment */}
+                {/* Content slides â€” each fades in during its scroll segment */}
                 {contentSlides.map((child, i) => (
                     <RevealSlide
                         key={i}
@@ -119,7 +119,7 @@ export default function ScrollPinSection({ children, itemCount }: ScrollPinSecti
                 {/* Scroll progress bar */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-900 z-50">
                     <motion.div
-                        className="h-full bg-indigo-500 origin-left"
+                        className="h-full bg-green-500 origin-left"
                         style={{ scaleX: scrollYProgress }}
                     />
                 </div>
@@ -127,3 +127,4 @@ export default function ScrollPinSection({ children, itemCount }: ScrollPinSecti
         </section>
     );
 }
+

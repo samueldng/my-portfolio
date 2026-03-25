@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
@@ -57,7 +57,7 @@ export function AnimatedTabs({
                         {isActive && (
                             <motion.div
                                 layoutId="active-tab-pill"
-                                className="absolute inset-0 bg-indigo-600/80 rounded-full"
+                                className="absolute inset-0 bg-green-600/80 rounded-full"
                                 style={{ zIndex: -1 }}
                                 transition={{
                                     type: "spring",
@@ -86,3 +86,4 @@ export function AnimatedTabs({
 }
 
 export default AnimatedTabs;
+

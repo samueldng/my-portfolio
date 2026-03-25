@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useRef, ReactNode, useState, useEffect } from "react";
 import {
@@ -97,9 +97,9 @@ export default function ProjectsShowcase3D({
                             className="text-left w-full max-w-sm mx-auto pt-10"
                         >
                             <h2 className="text-5xl font-black mb-4 tracking-tighter text-white">
-                                {title}<span className="text-indigo-500">.</span>
+                                {title}<span className="text-green-500">.</span>
                             </h2>
-                            <p className="text-gray-400 text-lg font-light border-l-2 border-indigo-500/50 pl-4">
+                            <p className="text-gray-400 text-lg font-light border-l-2 border-green-500/50 pl-4">
                                 {subtitle}
                             </p>
                         </motion.div>
@@ -131,9 +131,9 @@ export default function ProjectsShowcase3D({
                             className="mb-10 text-left"
                         >
                             <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tighter text-white">
-                                {title}<span className="text-indigo-500">.</span>
+                                {title}<span className="text-green-500">.</span>
                             </h2>
-                            <p className="text-gray-400 max-w-xl text-lg md:text-xl font-light border-l-2 border-indigo-500/50 pl-4 md:pl-6">
+                            <p className="text-gray-400 max-w-xl text-lg md:text-xl font-light border-l-2 border-green-500/50 pl-4 md:pl-6">
                                 {subtitle}
                             </p>
                         </motion.div>
@@ -162,7 +162,7 @@ export default function ProjectsShowcase3D({
                     <span className="text-xs text-gray-500 font-mono tracking-widest uppercase">Scroll</span>
                     <div className="w-32 h-1 bg-gray-800 rounded-full overflow-hidden">
                         <motion.div
-                            className="h-full bg-indigo-500 origin-left"
+                            className="h-full bg-green-500 origin-left"
                             style={{ scaleX: scrollYProgress }}
                         />
                     </div>
@@ -205,13 +205,14 @@ function ProjectCard3D({
                 setShowTech(false);
             }}
             className={`relative rounded-xl border transition-colors duration-500 bg-gray-900 overflow-hidden flex-shrink-0
-                  ${isHovered ? 'border-indigo-500 shadow-2xl shadow-indigo-500/20 z-20' : 'border-white/10 z-10'}`}
+                  ${isHovered ? 'border-green-500 shadow-2xl shadow-green-500/20 z-20' : 'border-white/10 z-10'}`}
             style={{
                 rotateY: isHovered ? 0 : staggeredRotation,
                 translateZ: isHovered ? 50 : staggeredZ,
                 width: CARD_WIDTH,
                 height: 550,
                 transformStyle: "preserve-3d",
+                willChange: "transform",
             }}
         >
             {/* Image Container */}
@@ -231,7 +232,7 @@ function ProjectCard3D({
                             href={project.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:text-indigo-400 hover:bg-black border border-white/20 transition-all"
+                            className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:text-green-400 hover:bg-black border border-white/20 transition-all"
                         >
                             <Github className="w-5 h-5" />
                         </a>
@@ -241,7 +242,7 @@ function ProjectCard3D({
                             href={project.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:text-indigo-400 hover:bg-black border border-white/20 transition-all"
+                            className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:text-green-400 hover:bg-black border border-white/20 transition-all"
                         >
                             <ExternalLink className="w-5 h-5" />
                         </a>
@@ -266,7 +267,7 @@ function ProjectCard3D({
                         onClick={() => setShowTech(!showTech)}
                         className={`flex items-center gap-2 px-4 py-2 border transition-colors text-xs uppercase tracking-wider font-mono
                        ${showTech || isHovered
-                                ? 'border-indigo-500/50 text-indigo-400 bg-indigo-500/10'
+                                ? 'border-green-500/50 text-green-400 bg-green-500/10'
                                 : 'border-white/10 text-gray-500 bg-gray-800/50'}`}
                     >
                         <Layers className="w-4 h-4" />
@@ -283,7 +284,7 @@ function ProjectCard3D({
                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 className="absolute bottom-full left-0 mb-3 w-full origin-bottom-left z-30"
                             >
-                                <div className="bg-gray-950 border border-indigo-500/30 p-4 rounded-lg shadow-xl shadow-black">
+                                <div className="bg-gray-950 border border-green-500/30 p-4 rounded-lg shadow-xl shadow-black">
                                     <motion.div
                                         initial="hidden"
                                         animate="visible"
@@ -377,7 +378,7 @@ function MobileProjectCard({ project, techLabel }: { project: Project; techLabel
                     <button
                         onClick={() => setShowTech(!showTech)}
                         className={`flex w-full justify-center items-center gap-2 px-4 py-3 border transition-colors text-xs uppercase tracking-wider font-mono
-                            ${showTech ? 'border-indigo-500/50 text-indigo-400 bg-indigo-500/10' : 'border-white/10 text-gray-400 bg-gray-800/50'}`}
+                            ${showTech ? 'border-green-500/50 text-green-400 bg-green-500/10' : 'border-white/10 text-gray-400 bg-gray-800/50'}`}
                     >
                         <Layers className="w-4 h-4" />
                         {techLabel}
@@ -409,3 +410,4 @@ function MobileProjectCard({ project, techLabel }: { project: Project; techLabel
         </div>
     );
 }
+

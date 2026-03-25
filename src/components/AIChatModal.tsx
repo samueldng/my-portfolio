@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -97,8 +97,8 @@ export default function AIChatModal({ isOpen, onClose }: { isOpen: boolean; onCl
             <div className="relative z-10 p-6 border-b border-white/5 bg-gray-950">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className="p-2 bg-indigo-600/20 border border-indigo-500/30 rounded-full">
-                    <Bot className="h-5 w-5 text-indigo-400" />
+                  <div className="p-2 bg-green-600/20 border border-green-500/30 rounded-full">
+                    <Bot className="h-5 w-5 text-green-400" />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-white font-mono tracking-tight">AI ASSISTANT</h3>
@@ -128,17 +128,17 @@ export default function AIChatModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 >
                   <div className={`flex max-w-[85%] ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
                     <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${message.sender === 'user'
-                        ? 'bg-indigo-600 ml-4'
+                        ? 'bg-green-600 ml-4'
                         : 'bg-gray-800 mr-4 border border-white/10'
                       }`}>
                       {message.sender === 'user' ? (
                         <User className="h-4 w-4 text-white" />
                       ) : (
-                        <Bot className="h-4 w-4 text-indigo-400" />
+                        <Bot className="h-4 w-4 text-green-400" />
                       )}
                     </div>
                     <div className={`px-5 py-4 ${message.sender === 'user'
-                        ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm'
+                        ? 'bg-green-600 text-white rounded-2xl rounded-tr-sm'
                         : 'bg-gray-900 border border-white/10 text-gray-300 rounded-2xl rounded-tl-sm'
                       }`}>
                       <p className="leading-relaxed text-sm">{message.text}</p>
@@ -157,9 +157,9 @@ export default function AIChatModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   className="flex justify-start"
                 >
                   <div className="flex items-center ml-12 gap-1 bg-gray-900 border border-white/10 px-4 py-3 rounded-2xl rounded-tl-sm">
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                 </motion.div>
               )}
@@ -176,14 +176,14 @@ export default function AIChatModal({ isOpen, onClose }: { isOpen: boolean; onCl
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Type a message..."
-                    className="w-full px-4 py-3 bg-gray-900 border border-white/10 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500/50 resize-none text-sm font-mono rounded-none"
+                    className="w-full px-4 py-3 bg-gray-900 border border-white/10 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-green-500/50 resize-none text-sm font-mono rounded-none"
                     rows={1}
                   />
                 </div>
                 <button
                   onClick={handleSend}
                   disabled={inputValue.trim() === ''}
-                  className="p-3 bg-indigo-600 hover:bg-indigo-700 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-3 bg-green-600 hover:bg-green-700 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
                 </button>

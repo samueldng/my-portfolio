@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
@@ -54,10 +54,10 @@ export default function SkillCard({ title, level, icon: Icon, description, index
         <div className="flex flex-col h-full justify-between">
           <div>
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-xl font-bold font-mono tracking-tight text-gray-100 group-hover:text-indigo-400 transition-colors">
+              <h3 className="text-xl font-bold font-mono tracking-tight text-gray-100 group-hover:text-green-400 transition-colors">
                 {title}
               </h3>
-              <Icon className="h-6 w-6 text-gray-500 group-hover:text-indigo-400 transition-colors" />
+              <Icon className="h-6 w-6 text-gray-500 group-hover:text-green-400 transition-colors" />
             </div>
             <p className="text-gray-500 text-sm leading-relaxed mb-6 font-light">
               {description}
@@ -71,7 +71,7 @@ export default function SkillCard({ title, level, icon: Icon, description, index
             </div>
             <div className="w-full bg-gray-900 h-1">
               <motion.div
-                className="bg-indigo-500 h-1"
+                className="bg-green-500 h-1"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${level}%` }}
                 viewport={{ once: true }}

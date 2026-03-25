@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { motion, useSpring, useTransform, animate, useMotionValue, useMotionTemplate } from 'framer-motion';
@@ -95,13 +95,13 @@ export default function LoadingOverlay() {
 
             {/* The animated clip-path container */}
             <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 opacity-20"
+                className="absolute inset-0 bg-gradient-to-r from-green-500 via-green-400 to-green-500 opacity-20"
                 style={{ clipPath }}
             />
 
             {/* The visible thin line before horizontal expansion */}
             <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-transparent via-cyan-400 to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-transparent via-green-400 to-transparent"
                 style={{
                     clipPath,
                     opacity: lineOpacity // Fades out as it expands
@@ -110,3 +110,4 @@ export default function LoadingOverlay() {
         </div>
     );
 }
+
